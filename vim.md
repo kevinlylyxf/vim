@@ -6052,6 +6052,87 @@ map uV      toggle_visual_mode reverse=True
   - 其中http和socks5代表协议类型，其也可以使用https协议，看自己设置，但是一般设置为http和socks
   - 其中all_proxy表示所有的流量都走协议的意思，所以我们也可以设置export all_proxy=http://127.0.0.1:8889，这样curl就能访问被墙的地址了，但是http协议本地监听端口是8889，要注意端口的对应。如果不设置all_proxy我们可以设置https_proxy和http_proxy来走http代理
 
+## wget
+
+- weget是Linux世界中最常用的网络下载工具，支持HTTP和FTP协议。
+
+##### 常用命令
+
+- 下载单个文件
+
+  ```
+  wget http://demo.com/demo.zip
+  ```
+
+- 下载多个文件
+
+  ```
+  将下载链接首先写在一个文本中，然后用wget -i url.txt来下载多个文件。假设我们有3个文件需要下载，这三个文件对应着三个链接，那么我们把这三个链接放在一个txt文件中。
+  url.txt
+  http://demo.com/demo1.zip
+  https://demo.com/demo2.zip
+  http://demo.com/demo3.zip
+  ```
+
+  - 那么我们在终端中运行
+
+    ```
+    wget -i url.txt
+    ```
+
+  - 有时候我们为了不让终端在下载的过程中回显任何信息可以加上 `-q`选项，该命令表示静默模式
+
+    ```
+    wget -i url.txt -q
+    ```
+
+- 断点续传
+
+  ```
+  wget -c http://demo.com/demo.zip
+  ```
+
+  - wget命令支持断点续传功能，只需要加上 `-c`选项即可
+
+  - 当然如果遇到网络不好的情况，我们希望wget可以多尝试几次，可以通过`-t n`来设置，`n`表示尝试的次数，`n`取`0`时表示一直尝试。
+
+    ```
+    wget -c -t 10 http://demo.com/demo.zip
+    ```
+
+  - 我们有时可能需要对下载的文件重命名，可以使用`-O`选项
+
+    ```
+    wget http://demo.com/demo.zip -O demo.download.zip 
+    ```
+
+- 后台执行，有时需要wget下载在后台执行，可以添加 -b选项，这时执行该命令的回显信息都会自动存储在wget.log文件中
+
+  ```
+  wget -b http://demo.com/demo.zip
+  ```
+
+- 从FTP服务器上下载文件时一般需要输入用户名和密码
+
+  ```
+  wget --ftp-user username --ftp-password xxxx ftp://demo.com/demo.zip
+  ```
+
+  - http一般不用设置用户名和密码
+
+- 上面这些命令在wget --help中都可以看到具体的命令是什么含义。
+
+##### wget和curl区别
+
+- wget 是一个独立的下载程序，无需额外的资源库，它也允许你下载网页中或是 FTP 目录中的任何内容, 能享受它超凡的下载速度，简单直接。
+- curl是一个多功能工具，是libcurl这个库支持的。它可以下载网络内容，但同时它也能做更多别的事情。
+- 从用途方面，wget倾向于网络文件下载；curl倾向于网络接口调试，相当于一个无图形界面的 PostMan 工具
+- **curl命令**是一个利用URL规则在命令行下工作的文件传输工具。它支持文件的上传和下载，所以是综合传输工具，但按传统，习惯称curl为下载工具。作为一款强力工具，curl支持包括HTTP、HTTPS、ftp等众多协议，还支持POST、cookies、认证、从指定偏移处下载部分文件、用户代理字符串、限速、文件大小、进度条等特征。做网页处理流程和数据检索自动化，curl可以祝一臂之力。
+- **wget命令**用来从指定的URL下载文件。wget非常稳定，它在带宽很窄的情况下和不稳定网络中有很强的适应性，如果是由于网络的原因下载失败，wget会不断的尝试，直到整个文件下载完毕。如果是服务器打断下载过程，它会再次联到服务器上从停止的地方继续下载。这对从那些限定了链接时间的服务器上下载大文件非常有用。
+- 我们可以将curl下载的东西输出到终端上，wget不行，所以我们可以用curl测试代理通不通curl google.com
+- Curl可以post数据，可以自定义发送头，如cookie/浏览器信息等，可以上传文件，等等。同时还支持N多协议，Curl要比Wget强大很多.
+- 所以在正常的下载时一般用wget就够用了，在其他一些更复杂的功能用curl。
+
 ## fzf
 
 ##### fzf官方文档说明
