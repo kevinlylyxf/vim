@@ -327,6 +327,9 @@ Plug 'preservim/nerdtree'
 " Taglist
 Plug 'liuchengxu/vista.vim'
 
+" auto create tags
+Plug 'ludovicchabant/vim-gutentags'
+
 " colors
 Plug 'tomasr/molokai'
 Plug 'morhetz/gruvbox'
@@ -522,3 +525,17 @@ let g:undotree_SplitWidth = 24
 let g:undotree_DiffAutoOpen = 1
 let g:undotree_DiffpanelHeight = 8
 let g:undotree_SetFocusWhenToggle = 1
+
+
+" ===
+" === vim-gutentags
+" ===
+let g:gutentags_ctags_tagfile = '.tags'
+let s:vim_tags = expand('~/.vim/tmp/tags')
+let g:gutentags_cache_dir = s:vim_tags
+if !isdirectory(s:vim_tags)
+   silent! call mkdir(s:vim_tags, 'p')
+endif
+let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extra=+q']
+let g:gutentags_ctags_extra_args += ['--c++-kinds=+pxI']
+let g:gutentags_ctags_extra_args += ['--c-kinds=+px']

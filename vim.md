@@ -4273,6 +4273,8 @@ noremap bo :%bd \| e# \| bd#<cr>
   - 其中，以逗号分隔的参数为：
     - ./.tags;，代表在文件的所在目录下，查找名字为“.tags”的标签文件。使用以点开头的文件名，以便与常规的项目文件相区别。结尾的分号代表查找不到时继续向上递归到父目录。这样对于分布在不同子目录中的源代码文件，只需要在项目顶层目录放置一个.tags文件即可。
     - .tags，是指同时在 Vim 的当前目录（即:pwd命令返回的目录）下查找 .tags 文件。
+    - 上面两种的区别是，一个是文件所在的目录下tags文件，一个是在当前pwd目录下，区别在于我们可以在当前目录下用vim看其他目录的文件。所以会有这个区别。
+    - 上面中没有分号就只会在文件的所在目录下查找tags文件，并不会向上递归查找。
 
 - 假设我们针对rails源码库（*~/src/rails*）生成tags文件，并在'tags'选项中包含此文件，那么就可以在编写代码时，方便地跳转至标签的定义处，获得相关地使用说明。
 
@@ -5590,7 +5592,11 @@ let g:coc_snippet_prev = '<c-k>'
     Ctrl +s, Ctrl +s        在整行增加一个配对符号，配对符号单独成行并进行缩进
     ```
   
-    
+
+#### vim-gutentags
+
+- If you want to force-disable Gutentags for a given project even though it does match one of the items in gutentags_project_root, create a file named ".notags" at the root of the project.
+  - 如果您想强制禁用给定项目的 Gutentags，即使它确实如此匹配gutentags_project_root中的一项，创建一个名为项目根目录下的“.notags”。
 
 ## Tmux
 
