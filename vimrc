@@ -55,6 +55,7 @@ set indentexpr=
 set foldmethod=indent
 set foldlevel=99
 set foldenable
+set backspace=indent,eol,start
 " Cancel automatic folding
 "set foldlevelstart=99
 
