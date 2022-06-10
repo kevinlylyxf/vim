@@ -5500,6 +5500,72 @@ noremap bo :%bd \| e# \| bd#<cr>
 - CocList自带fuzzy模糊匹配，我们可以在里面进行搜索，wildmenu和CocList没有关系
 - 如果我们使用CocCommand来查看命令按tap就是我们匹配的那些命令此时只能使用tap来选择或者手打，如果使用coclist commands来查看就是可以模糊匹配这些命令，此时就可以输入关键字来匹配。
 
+##### coc extensions和lsp server
+
+###### LSP
+
+- **LSP**(Language Server Protocol) 语言服务协议，此协议定义了在编辑器或IDE与语言服务器之间使用的协议，该语言服务器提供了例如自动补全，转到定义，查找所有引用等的功能
+
+  - LSP工作原理为c/s架构，IDE作为前端提供请求，语言服务器作为后端提供服务，这是两个进程，LSP定义了进程间通信的一些具体的协议，只要按照这个协议实现，语言服务器可以用任何语言来写，这样就大大简化了IDE提供服务的过程，不用重新编写接口来实现了，直接使用LSP来编写一套就可以直接在各个IDE中使用了。
+
+  - 一些编译器例如clangd就具有语言服务器的功能，在使用语言服务器的时候我们需要安装这些编辑器
+
+    ```
+    "languageserver": {
+      "clangd": {
+        "command": "clangd",
+        "rootPatterns": ["compile_flags.txt", "compile_commands.json"],
+        "filetypes": ["c", "cc", "cpp", "c++", "objc", "objcpp"]
+      }
+    }
+    ```
+
+    - 使用语言服务器的时候，配置时的命令clangd表示那个编译器什么的，这个要在你的PATH环境变量里面。使用which clangd能看到。语言服务器本来就是一个进程，是一个elf文件，所以在使用的时候那个command选项就是那个进程的名字，也即是我们安装的语言服务器的名字。有一些编译器自带了语言服务器的功能，所以写上编译器的名字就可以了，但是有一些语言服务器需要我们自己编译安装，此时需要按照github上手册自己安装，然后放到PATH路径里面，command写上名字即可。
+
+  - 使用LSP的时候要注意一定要安装语言服务器，否则不能使用。
+
+  - 在coc.nvim官网看[Configure language servers](https://github.com/neoclide/coc.nvim/wiki/Language-servers)，里面有各种语言的配置，但是里面有一些会让你尝试使用coc extensions，可以尝试安装coc extensions体系来补全，这样比较好一点。
+
+    - 如果我们想找对应的语言是否支持，可以查看上面这个链接，这个链接是按语言来分类的，在这里就能看见ada
+
+###### coc extensions
+
+- coc还有另外一套自动补全的体系，叫做coc extensions
+
+- 使用coc extensions的主要原因是为了获得更好的用户体验。社区提供的一些语言服务器的性能不如 VSCode 扩展。 Coc 扩展可以从 VSCode 扩展中派生出来，并且应该提供类似或更好的用户体验。
+
+- 与配置的语言服务器相比，扩展允许更多功能。
+
+  - 扩展可以贡献命令（比如 VSCode），你可以通过不同的方式使用 coc 命令：
+
+    - 使用命令 :CocList commands 打开命令列表并选择您需要的一个。
+
+    - 使用 :CocCommand 和 <tab> 来完成命令行。
+
+    - An example config to use the custom command `Tsc` for `tsserver.watchBuild`:
+
+      ```shell
+      command! -nargs=0 Tsc    :CocCommand tsserver.watchBuild
+      ```
+
+  - Extensions can contribute properties to the schema `coc-settings.json`, like in VSCode you can write the configuration with completion and validation support when you have `coc-json` installed.扩展可以为模式 coc-settings.json 贡献属性，就像在 VSCode 中一样，当您安装 coc-json 时，您可以编写具有完成和验证支持的配置。
+
+    - 类似于可以对这个扩展进行编写json文件进行配置。
+
+  - Extensions can contribute json schemas (loaded by [coc-json](https://github.com/neoclide/coc-json))扩展可以贡献 json 模式（由 coc-json 加载）
+
+  - Extensions can contribute snippets that can be loaded by [coc-snippets](https://github.com/neoclide/coc-snippets) extension.扩展可以贡献可以由 coc-snippets 扩展加载的片段。
+
+- 因为有上面一些好处，主要的是可以使用一些coc命令，语言服务器没有这些功能。
+
+- 有一些coc extensions会使用语言服务器来完成功能，相当于在语言服务器上包装了一层，增加了一些功能，对于这些扩展，我们需要安装语言服务器。还有一些是不需要语言服务器，直接使用扩展这个体系就能完成功能。
+
+  - **[coc-clangd](https://github.com/clangd/coc-clangd)** for C/C++/Objective-C, use [clangd](https://clangd.github.io/)
+    - 上图是coc-clangd扩展给出的例子，说明其要使用clangd来完成功能。
+  - **[coc-json](https://github.com/neoclide/coc-json)** for `json`.
+    - 上面这个扩展是不需要安装语言服务器的
+  - 注意看官方的说明，因为有的需要有的不需要。
+
 ##### coc-snippets
 
 ```
