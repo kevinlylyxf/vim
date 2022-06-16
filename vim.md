@@ -1,4 +1,4 @@
-### :基础理解
+### 基础理解
 
 ##### vim插件结构目录
 
@@ -6127,14 +6127,28 @@ map uV      toggle_visual_mode reverse=True
 ##### DNS污染
 
 - **网域服务器缓存污染**（DNS cache pollution），又称**域名服务器缓存投毒**（DNS cache poisoning），是指一些刻意制造或无意中制造出来的[域名服务器](https://baike.baidu.com/item/域名服务器/9705133)[数据包](https://baike.baidu.com/item/数据包)，把域名指往不正确的IP地址。一般来说，在[互联网](https://baike.baidu.com/item/互联网)上都有可信赖的网域服务器，但为减低网络上的流量压力，一般的域名服务器都会把从上游的域名服务器获得的解析记录暂存起来，待下次有其他机器要求解析域名时，可以立即提供服务。一旦有关网域的局域域名服务器的缓存受到污染，就会把网域内的计算机导引往错误的服务器或服务器的网址。
+
 - 某些国家或地区出于某些目的为了防止某网站被访问，而且其又掌握部分国际DNS根[目录服务器](https://baike.baidu.com/item/目录服务器/7750458)或镜像，也会利用此方法进行屏蔽。
+
 - 原理解析
   - 我们假设A为用户端，B为DNS服务器，C为A到B链路的一个节点的网络设备（路由器，交换机，网关等等）。然后我们来模拟一次被污染的DNS请求过程。
   - A向B构建[UDP](https://baike.baidu.com/item/UDP)连接，然后，A向B发送查询请求，查询请求内容通常是：“A baidu.com”，这一个数据包经过节点设备C继续前往[DNS服务器](https://baike.baidu.com/item/DNS服务器/8079460)B；然而在这个过程中，C通过对数据包进行特征分析（远程通讯端口为DNS服务器端口，激发内容关键字检查，检查特定的域名如上述的“baidu.com",以及查询的记录类型"[A记录](https://baike.baidu.com/item/A记录)"），从而立刻返回一个错误的解析结果（如返回了"A 123.123.123.123"），众所周知，作为链路上的一个节点，C机器的这个结果必定会先于真正的域名服务器的返回结果到达用户机器A，而我们的DNS解析机制有一个重要的原则，就是只认第一，因此C节点所返回的查询结果就被A机器当作了最终返回结果，用于构建链接。
+  
 - 防除方法
   - 对于DNS污染，一般除了使用[代理服务器](https://baike.baidu.com/item/代理服务器)和[VPN](https://baike.baidu.com/item/VPN)之类的软件之外，并没有什么其它办法。但是利用我们对DNS污染的了解，还是可以做到不用代理服务器和VPN之类的软件就能解决DNS污染的问题，从而在不使用代理服务器或VPN的情况下访问原本访问不了的一些网站。当然这无法解决所有问题，当一些无法访问的网站本身并不是由DNS污染问题导致的时候，还是需要使用代理服务器或VPN才能访问的
+  
   - DNS污染的数据包并不是在网络数据包经过的[路由器](https://baike.baidu.com/item/路由器)上，而是在其旁路产生的。所以DNS污染并无法阻止正确的DNS解析结果返回，但由于旁路产生的数据包发回的速度较国外[DNS服务器](https://baike.baidu.com/item/DNS服务器)发回的快，操作系统认为第一个收到的数据包就是返回结果，从而忽略其后收到的数据包，从而使得DNS污染得逞。而某些国家的DNS污染在一段时期内的污染IP却是固定不变的，从而可以忽略返回结果是这些IP地址的数据包，直接解决DNS污染的问题。
+  
   - 修改[hosts](https://baike.baidu.com/item/hosts)文件，操作系统中[Hosts文件](https://baike.baidu.com/item/Hosts文件)的权限优先级高于DNS服务器，操作系统在访问某个域名时，会先检测HOSTS文件，然后再查询DNS服务器。可以在[hosts](https://baike.baidu.com/item/hosts)添加受到污染的DNS地址来解决DNS污染和DNS劫持。
+  
+    - 修改/etc/hosts文件时不能加上www，这样会解析出错，例如
+  
+      ```
+      140.82.113.4 github.com
+      这种写法是正确的，如果写成www.github.com就错误了。
+      ```
+  
+      
 
 ##### DNS劫持
 
@@ -6311,3 +6325,269 @@ $(brew --prefix)/opt/fzf/install
   - 相当于我们在启动zsh的时候就自动执行了这两个脚本，这样我们就可以使用扩展功能和键扩展了。
 
 - 上面这是手动安装的，最简单的方法是下载git仓库，里面有一个安装脚本，直接执行就可以了，但是最后source的是仓库里面那两个文件，导致这个仓库不能删除，我们可以简单修改一下，然年将这个仓库删除
+
+
+## cscope
+
+- cscope是一个程序，功能类似于ctags，只适用于c,c++,java源码，功能比ctags强大，类似于ctags程序，cscope需要安装
+
+- cscope作用
+
+  ```
+  Cscope is an interactive screen-oriented tool that helps you:
+         Learn how a C program works without endless flipping through a thick
+         listing.
+         
+         Locate the section of code to change to fix a bug without having to
+         learn the entire program.
+         
+         Examine the effect of a proposed change such as adding a value to an
+         enum variable.
+  
+         Verify that a change has been made in all source files such as adding
+         an argument to an existing function.
+  
+         Rename a global variable in all source files.
+         
+         Change a constant to a preprocessor symbol in selected lines of files.
+  ```
+
+  ```
+  It is designed to answer questions like:
+         Where is this symbol used?
+         Where is it defined?
+         Where did this variable get its value?
+         What is this global symbol's definition?
+         Where is this function in the source files?
+         What functions call this function?
+         What functions are called by this function?
+         Where does the message "out of space" come from?
+         Where is this source file in the directory structure?
+         What files include this header file?
+  它旨在回答以下问题：
+          这个符号在哪里使用？
+          它在哪里定义？
+          这个变量从哪里得到它的值？
+          这个全局符号的定义是什么？
+          这个函数在源文件中的什么位置？
+          什么函数调用这个函数？
+          这个函数调用了哪些函数？
+          “空间不足”的信息从何而来？
+          这个源文件在目录结构中的什么位置？
+          哪些文件包含这个头文件？
+  ```
+
+- 如果是直接调用cscope来使用会得到一个全屏的选项，下面后写一堆来表示上面的问题，回答之后就会使用默认的文本编辑器编辑文件，此时就不能使用类似于tags文件的跳转功能了。
+
+- vim下使用的cscope是用的cscope接口，此时我们可以使用类似于tags文件的跳转功能。下面介绍的都是cscope作为vim插件使用的。
+
+- 所有 cscope 命令都通过主 cscope 的子选项访问命令“:cscope”。 最短的缩写是“:cs”。 ":scscope"命令做同样的事情，也分割窗口（简写：“scs”）。
+
+- cs add
+
+  ```
+  add   : Add a new cscope database/connection.
+  
+          USAGE   :cs add {file|dir} [pre-path] [flags]
+  
+              [pre-path] is the pathname used with the -P command to cscope.
+  
+              [flags] are any additional flags you want to pass to cscope.
+  
+          EXAMPLES >
+              :cscope add /usr/local/cdb/cscope.out
+              :cscope add /projects/vim/cscope.out /usr/local/vim
+              :cscope add cscope.out /usr/local/vim -C
+  ```
+
+  - 上面中的flag例如-C是cscope命令中的选项，可以通过man手册看到，-C是忽略大小写，表示在查找的时候忽略大小写。
+
+  - 一些使用
+
+    ```
+    首先来分享一个小脚本，可以帮助我们在项目中生成cscope.out 和ctags。
+    
+    我把这个文件命名为cs.sh
+    
+    #!/bin/sh  
+    find . -name "*.h" -o -name "*.c" -o -name "*.cpp" -o -name "*.java"\  
+            >cscope.files  
+    cscope -bkq -i cscope.files  
+    ctags -R  
+    
+    
+    需要的注意的是，上面的脚本中，生成的cscope.files中保存的是相对路径，而不是绝对路径。这样的话，在cscope 中查找tags的时候，是没法打开相应的包含查找结果的文件的。怎么避免这个问题呢？有如下两个方法：
+    
+    1， 在cs.sh的脚本中，find命令后接一个变量PRO_PATH，这个PRO_PATH是当前项目的跟目录，这个时候cscope.files中保存的就是所有项目文件的绝对路径了。
+    
+    2，在:cs add的时候，接一个prepend path
+    
+    :cs add [cscope.out] [pre-path]  
+    
+    我用了第二个方法，所以就有了下面的vimrc片段，
+    
+    if has("cscope")  
+        set csprg=/usr/bin/cscope  
+        set csto=0  
+        set cst  
+        set csverb  
+        set cspc=3  
+        "add any database in current dir  
+        if filereadable("cscope.out")  
+            cs add cscope.out  
+        "else search cscope.out elsewhere  
+        else  
+           let cscope_file=findfile("cscope.out", ".;")  
+           let cscope_pre=matchstr(cscope_file, ".*/")  
+           if !empty(cscope_file) && filereadable(cscope_file)  
+               exe "cs add" cscope_file cscope_pre  
+           endif        
+         endif  
+    endif  
+    ```
+
+    
+
+- cs find
+
+  ```
+  find  : Query cscope.  All cscope query options are available except option #5 ("Change this grep pattern").
+  
+          USAGE   :cs find {querytype} {name}
+  
+              {querytype} corresponds to the actual cscope line
+              interface numbers as well as default nvi commands:
+  
+                  0 or s: Find this C symbol
+                  1 or g: Find this definition
+                  2 or d: Find functions called by this function
+                  3 or c: Find functions calling this function
+                  4 or t: Find this text string
+                  6 or e: Find this egrep pattern
+                  7 or f: Find this file
+                  8 or i: Find files #including this file
+  	For all types, except 4 and 6, leading white space for {name} is
+          removed.  For 4 and 6 there is exactly one space between {querytype}
+          and {name}.  Further white space is included in {name}.
+  
+  ```
+
+  - 上面的意思是说除了4和6之外其他的name和querytype之间的空格都会被删掉当作一个，4和6如果有多余的空格会放到name中，当作name的一部分
+
+- cs kill
+
+  ```
+  kill  : Kill a cscope connection (or kill all cscope connections).
+  
+              USAGE   :cs kill {num|partial_name}
+  ```
+
+  - 断掉这个连接，将cs add的cscope文件断掉
+
+- cs reset ,cs show都是和连接有关
+
+- cstag命令
+
+  - 如果你使用 cscope 和 ctags，|:cstag| 允许您在跳转之前搜索其中一个。 例如，您可以选择首先在您的 cscope 数据库中搜索匹配项，如果没有找到，则将搜索您的标签文件。 这发生的顺序由|csto| 的值决定。 
+  - |:cstag| 搜索 cscope 数据库时，对标识符执行等效的 ":cs find g"。
+  - |:cstag| 相当于 |:tjump| 搜索标签文件时在标识符上。
+  - 上面说明cstag命令在查找cscope文件时，执行的是cs find g命令，查找tags文件时，执行的是tjump命令。
+
+##### cscope一些选项
+
+-  cscopeprg    csprg
+
+  ```
+  'cscopeprg' specifies the command to execute cscope.  The default is "cscope".  For example: >
+          :set csprg=/usr/local/bin/cscope
+  ```
+
+  - 上面说的是可以设置cscope可执行程序的路径，一般都在PATH里面不用设置。
+
+- cscopetag    cst
+
+  ```
+  If 'cscopetag' set, the commands ":tag" and CTRL-] as well as "vim -t" will always use |:cstag| instead of the default :tag behavior.  Effectively, by setting 'cst', you will always search your cscope databases as well as your tag files.  The default is off.  Examples: >
+          :set cst
+          :set nocst
+  ```
+
+  - 上面的意思是说如果设置了cst，tag ，CTRL-] ，vim -t这三个命令将会使用cstag命令，而不是用默认的tag命令。cstag命令说明如上面。
+
+- cscopetagorder   csto
+
+  ```
+  The value of 'csto' determines the order in which |:cstag| performs a search.If 'csto' is set to zero, cscope database(s) are searched first, followed by tag file(s) if cscope did not return any matches.  If 'csto' is set to one, tag file(s) are searched before cscope database(s).  The default is zero.
+  Examples: >
+          :set csto=0
+          :set csto=1
+  ```
+
+  - 上面说的是如果同时使用ctags和cscope时，可以设置查找顺序，设置为0表示先查询cscope文件，设置为1先查询tags文件。
+
+- cscopeverbose   csverb
+
+  ```
+  If 'cscopeverbose' is not set (the default), messages will not be printed indicating success or failure when adding a cscope database.  Ideally, you should reset this option in your |.vimrc| before adding any cscope databases, and after adding them, set it.  From then on, when you add more databases within Vim, you will get a (hopefully) useful message should the database fail to be added.  Examples: >
+          :set csverb
+          :set nocsverb
+  ```
+
+  - 上面表示如果设置了csverb在add cscope文件时会打印提示信息。
+
+##### 官方建议vimrc
+
+```
+Put these entries in your .vimrc (adjust the pathname accordingly to your
+setup): >
+
+        if has("cscope")
+                set csprg=/usr/local/bin/cscope
+                set csto=0
+                set cst
+                set nocsverb
+                " add any database in current directory
+                if filereadable("cscope.out")
+                    cs add cscope.out
+                " else add database pointed to by environment
+                elseif $CSCOPE_DB != ""
+                    cs add $CSCOPE_DB
+                endif
+                set csverb
+        endif
+```
+
+- 可以通过设置环境变量来改变添加的cscope文件
+
+##### 键盘映射
+
+- 通过help cscope可以看到官方介绍的一些键盘映射，包括水平分屏和垂直分屏以及直接跳转的。
+- 通过设置cst可以将一些tag操作转换成cstag，但是我们也可以不设置，直接tag使用tag的命令，cscope文件使用cstag命令，或者不使用cstag命令，直接使用键盘映射cs find g这个命令，这样两个就区分开了。cstag只是给我们提供了一个途径更好的使用两种文件，但是我们也可以不用。
+
+##### 生成cscope文件
+
+- -b选项生成交叉引用文件，即数据库文件cscope.out，不会进入到交互界面
+
+- -R递归选项。
+
+- -q选项
+
+  ```
+  nable  fast  symbol lookup via an inverted index. This option causes cscope to create 2 more files (default names ``cscope.in.out'' and ``cscope.po.out'') in addition to the normal database.
+                This allows a faster symbol search algorithm that provides noticeably faster lookup performance for large projects.
+  ```
+
+  - 会额外生成两个文件，查找速度更快。
+
+- -f生成的cscope文件默认为cscope.out，可以使用-f选项修改名称。
+
+- 还可以通过脚本生成
+
+  ```
+  find . -name "*.h" -o -name "*.c" -o -name "*.cpp" > cscope.files
+  cscope -bkq -i cscope.files
+  rm cscope.files
+  ```
+
+  - 先查找文件目录放到一个文件中，然后通过文件生成cscope，然后在删除
+  - 这样不如cscope -Rb这样方便。
