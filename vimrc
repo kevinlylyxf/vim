@@ -98,11 +98,6 @@ au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g
 tnoremap <C-N> <C-\><C-N>
 noremap \t :vertical term<CR>
 
-" ===
-" === fold Behaviors
-" ===
-nnoremap <LEADER><LEADER> za
-
 
 " ===
 " === Basic Mappings
@@ -111,6 +106,11 @@ nnoremap <LEADER><LEADER> za
 " Set <LEADER> as <SPACE>
 let mapleader="\<space>"
 noremap ; :
+
+" ===
+" === fold Behaviors
+" ===
+nnoremap <LEADER><LEADER> za
 
 " Save & quit
 noremap Q :q<CR>
