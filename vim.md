@@ -4074,6 +4074,15 @@ noremap bo :%bd \| e# \| bd#<cr>
   ctags --langmap=Ada:+.a 
   ```
 
+- 可以设置让某些语言在tag文件里面有特殊的一些说明，例如c++给类产生tag文件
+
+  ```
+  ctags --list-kinds
+  ```
+
+  - 命令可以查看所有语言对应的特殊标记。如果需要这些标记的话，可以使用--<LANG>-kinds=+命令来设置这个在tag文件中的特殊标记。否则使用默认的。
+  - uninversial-ctags使用的是--kinds-<LANG>这个命令，上面那个是最开始的那个ctags的命令。注意区分一下。
+
 - ctags是有一些额外的选项，用的时候设置一下。
 
 ###### 标签文件
