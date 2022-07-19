@@ -4,6 +4,54 @@
 
 [介绍](https://dxsm.github.io/books/vimL/z/20170816_5.html)
 
+##### vim下Alt键映射设置
+
+- 将<A+key>的输入格式换成^[key就可以了，输入方式为：在编辑模式下，按下Crtl+v后在按下Alt+key（你想设置的键），这样vim中显示为：^[key
+- 尖括号记得也要删除不用了。
+
+##### vim下命令行模式中backspace键不能用
+
+- 就是在taishan服务器上的vim不能用，不知道为什么，manjaro上同样的配置就能用。
+
+- 主要是这句话引起的
+
+  ```
+  cnoremap <C-h> <Left>
+  ```
+
+  - 应该是和backspace键冲突了，但是用verbose命令查看没看到错误。将h改成u就正常了
+  - 其他的平台是不需要改的，能正常使用。
+
+##### vim下$VIMRUNTIME
+
+- 用vim --version命令查看得到的一些变量例如HOME，VIMRUNTIME，这些是vim的变量，并不是环境变量，所以要查看的话需要在vim命令行中echo，这样就对了。
+
+##### vim下filetype设置
+
+```
+filetype plugin indent on
+其实，上面这一条命令，可以分为三条命令：
+filetype on
+filetype plugin on
+filetype indent on 
+```
+
+- filetype on
+  - “**filetype on**“命令打开文件类型检测功能，它相当于文件类型检测功能的开关。在执行”**filetype on**“命令时，vim实际上执行的是$vimRUNTIME/filetype.vim脚本。这个脚本使用了自动命令(autocmd)来根据文件名来判断文件的类型，如果无法根据文件名来判断出文件类型，它又会调用$vimRUNTIME/scripts.vim来根据文件的内容设置文件类型。有兴趣可以读一下这两个脚本，以获得更深的认识。
+  - 在上述步骤完成后，绝大多数已知类型的文件，都能被正确检测出文件类型。如果文件的类型未能被正确的检测出来，就需要手工设置文件类型，这可以通过”**set filetype**“完成，例如，如果你把main.c改名为main.c.bak1，那么它就无法被正确检测出文件类型。
+- filetype plugin on
+  - ”**filetype plugin on**“，允许vim加载文件类型插件。当这个选项打开时，vim会根据检测到的文件类型，在runtimepath中搜索该类型的所有插件，并执行它们。
+  - “**filetype plugin on**“命令，实际上是执行$vimRUNTIME/ftplugin.vim脚本，有兴趣可以读一下这个脚本。这个脚本中会设置自动命令，在runtimepath中搜索文件类型插件。
+  - runtimepath的定义在不同的系统上不一样，对UNIX系统来说，这些路径包括：$HOME/.vim、$vim/vimfiles、$vimRUNTIME、$vim/vimfiles/after、$HOME/.vim/after。
+  -  vim 提供了一个选项叫 `&runtimepath` （常简称 `&rtp`），那是类似系统 shell 的环境变量 `$PATH`，就是一组目录，只不过不用冒号分隔，而是用逗号分隔。可用如下 命令查看 `&rtp` ：
+  
+    ```vim
+    :echo &rtp
+    :echo split(&rtp, ',')
+    ```
+- filetype indent on
+  - “**filetype indent on**“允许vim为不同类型的文件定义不同的缩进格式。这条命令也是通过一个脚本来完成加载：$vimRUNTIME/indent.vim。和”**filetype plugin on**“类似，它也通过设置自动命令，在runtimepath的indent子目录中搜索缩进设置。对c类型的文件来说，它只是打开了cindent选项。
+
 ##### vim插件结构目录
 
 - 在vim安装目录下同样有一套插件目录，在自己配置的环境下同样有一套，作用是一样的，一般安装目录/usr/share/vim，自己配置的目录在~/.vim
@@ -32,6 +80,27 @@
 
 - 此目录下的插件在启动vim时会自动加载
 - vim-plug默认的插件安装目录~/.vim/plugged，并不是plugin，vim-plug插件会自己控制插件的安装与加载，并不需要vim本身去加载了，所以换了一个文件，有vim-plug来控制加载。
+
+###### ftplugin
+
+- ~/.vim/ftplugin/此目录中的文件有些不同。当vim给缓冲区的filetype设置一个值时，vim将会在~/.vim/ftplugin/ 目录下来查找和filetype相同名字的文件。例如你运行set filetype=derp这条命令后，vim将查找~/.vim/ftplugin/derp.vim此文件，如果存在就运行它。不仅如此，它还会运行ftplugin下相同名字的子目录中的所有文件，如~/.vim/ftplugin/derp/这个文件夹下的文件都会被运行。每次启用时，应该为不同的文件类型设置局部缓冲选项，如果设置为全局缓冲选项的话，将会覆盖所有打开的缓冲区。
+
+  - 官方目录里面也有一个这样的ftplugin目录，可以用自己的目录替代官方的目录。
+
+- 文件类型是 vim 的一个概念，每个编辑的文件，都有个独立的选项值 `&filetype` ，这 就是该文件的类型。直观地看，文件名后缀代表着其类型。但本质上这不是同一个概念。 vim 只是主要根据文件名后缀来判断一个文件类型，有时还根据文件的部分内容（如前几 行）来判断文件类型，用户还可以用 `set filetype=` 来手动设置一个类型。一种文件 类型也可以关联好几个后缀名，比如 `cpp`、`hpp` 都是 C++ 文件，文件类型都是 `cpp`， 同样情况还有 `htm` 与 `html` 后缀名的文件，都认为是 `html` 文件类型。
+
+- 文件类型插件要生效，还得在 `vimrc` 中添加 `filetype plugin on` 这行配置，这一 般也是推荐必须配置。然后在打开文件并成功检测到属于某种文件类型时，vim 就会加载 `&rtp/ftplugin/{&ft}.vim` 脚本。
+
+- 例如，每当打开 `*.cpp` 或 `*.hpp` 文件时，vim 都认为它属于 `cpp` 文件类型，它 就会加载 `~/.vim/ftplugin/cpp.vim` 脚本，以其其他 `&rtp` 目录下的 `ftplugin/cpp.vim` 。实际上，vim 搜寻文件类型插件脚本时规则很宽松，还会尝试搜 索 `cpp_*.vim` 脚本，甚至子目录 `cpp/*.vim` 下的脚本。这目的是允许在同一个 `ftplugin/` 目录中为一种文件类型提供多个插件脚本，它们都会被加载运行。
+
+- 如果不想加载官方的ftplugin中的插件，可以在自己的.vim目录下创建一个ftplugin目录，然后创建ada.vim，名字是具体的文件类型名字+.vim，然后写上下面这句话
+
+  ```
+  let b:did_ftplugin=1
+  ```
+
+  - 原因为，vim官方的ftplugin插件开始几行通过判断 `b:did_ftplugin` 变量的存在性来决定是否继续加载当前这个脚本， 一般在加载当前脚本时会将该值设为 `1` ，这是 vim 官方推荐的文件类型插件的标准头 写法。注意如果每个类型插件都是这样写，那是排他的意义，那就是加载了其中第一个类 型插件的脚本，就不会再加载其他（有这个保护头的）脚本。虽然 vim 的机制会继续搜 索其他匹配的类型插件脚本，但 VimL 语句层面上控制了不会重复加载，而这种控制是用 户可选的方案。
+  - 所以我们可以在自己的目录下设置这个变量为1，这样就不会加载官方的了。
 
 ##### 复制粘贴
 
