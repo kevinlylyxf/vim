@@ -26,6 +26,8 @@ autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
 let &t_ut=''
 set autochdir
 set encoding=utf-8
+set nocompatible
+filetype plugin indent on
 
 
 " ===
