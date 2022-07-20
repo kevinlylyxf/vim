@@ -1,4 +1,4 @@
-### 基础理解
+### 	基础理解
 
 ##### vim插件介绍以及vimL语言的编写
 
@@ -39,18 +39,24 @@ filetype indent on
 - filetype on
   - “**filetype on**“命令打开文件类型检测功能，它相当于文件类型检测功能的开关。在执行”**filetype on**“命令时，vim实际上执行的是$vimRUNTIME/filetype.vim脚本。这个脚本使用了自动命令(autocmd)来根据文件名来判断文件的类型，如果无法根据文件名来判断出文件类型，它又会调用$vimRUNTIME/scripts.vim来根据文件的内容设置文件类型。有兴趣可以读一下这两个脚本，以获得更深的认识。
   - 在上述步骤完成后，绝大多数已知类型的文件，都能被正确检测出文件类型。如果文件的类型未能被正确的检测出来，就需要手工设置文件类型，这可以通过”**set filetype**“完成，例如，如果你把main.c改名为main.c.bak1，那么它就无法被正确检测出文件类型。
+  - nerdcommenter这些就是根据filetype变量来查看是什么类型的文件，然后执行正确的函数。注意和filetype plugin on这个结构区分开，那个结构是自动加载ftplugin目录下的插件的。nerdcommenter不用给每种类型的文件都创建一个插件然后放到ftplugin目录中。我们只要知道filetype变量的值就可以执行正确的函数了。
 - filetype plugin on
   - ”**filetype plugin on**“，允许vim加载文件类型插件。当这个选项打开时，vim会根据检测到的文件类型，在runtimepath中搜索该类型的所有插件，并执行它们。
   - “**filetype plugin on**“命令，实际上是执行$vimRUNTIME/ftplugin.vim脚本，有兴趣可以读一下这个脚本。这个脚本中会设置自动命令，在runtimepath中搜索文件类型插件。
   - runtimepath的定义在不同的系统上不一样，对UNIX系统来说，这些路径包括：$HOME/.vim、$vim/vimfiles、$vimRUNTIME、$vim/vimfiles/after、$HOME/.vim/after。
   -  vim 提供了一个选项叫 `&runtimepath` （常简称 `&rtp`），那是类似系统 shell 的环境变量 `$PATH`，就是一组目录，只不过不用冒号分隔，而是用逗号分隔。可用如下 命令查看 `&rtp` ：
-  
+
     ```vim
     :echo &rtp
     :echo split(&rtp, ',')
     ```
 - filetype indent on
   - “**filetype indent on**“允许vim为不同类型的文件定义不同的缩进格式。这条命令也是通过一个脚本来完成加载：$vimRUNTIME/indent.vim。和”**filetype plugin on**“类似，它也通过设置自动命令，在runtimepath的indent子目录中搜索缩进设置。对c类型的文件来说，它只是打开了cindent选项。
+
+##### vim下make命令
+
+- vim下make命令会读取当前文件内的makefile文件，或者是执行makeprg参数的命令，如果都没有就会报错
+- 执行编译后的错误可以在quickfix窗口打开。这样就可以直接跳转到源文件的错误处。这样如果存在多个目录的情况下比较有用，可以直接跳转到具体的文件错误处。
 
 ##### vim插件结构目录
 
@@ -1023,6 +1029,14 @@ filetype indent on
   ```
 
 - 使用`:help quickfix`命令，可以查看关于QuickFix的更多帮助信息。
+
+- 可以不用打开quickfix窗口就跳转到具体的位置，例如make编译错误，vimgrep都可以在不打开quickfix情况下进行跳转
+
+  ```
+  :cc [num]
+  ```
+
+  - cc和具体的数字就是跳转到哪一个，其中的信息会在窗口最下面状态栏显示出来。
 
 ### 模式详解
 

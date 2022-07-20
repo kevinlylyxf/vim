@@ -215,15 +215,21 @@ cnoremap <M-w> <S-Right>
 " === Window management
 " ===
 " Use <space> + new arrow keys for moving the cursor around windows
+" lowercase is for moving windows, uppercase is for swapping windows
 noremap <LEADER>w <C-w>w
 noremap <LEADER>k <C-w>k
+noremap <LEADER>K <C-w>K
 noremap <LEADER>j <C-w>j
+noremap <LEADER>J <C-w>J
 noremap <LEADER>h <C-w>h
+noremap <LEADER>H <C-w>H
 noremap <LEADER>l <C-w>l
+noremap <LEADER>L <C-w>L
 noremap <LEADER>o <C-w>o
 " new window
 noremap <LEADER>n :vnew<CR>
-
+" put the current window in a new tab
+noremap <LEADER>T <C-w>T
 
 " Disable the default s key
 noremap s <nop>
@@ -453,7 +459,7 @@ xmap ac <Plug>(coc-classobj-a)
 omap ac <Plug>(coc-classobj-a)
 
 " Switch between source/header
-noremap hc :CocCommand clangd.switchSourceHeader<CR>
+noremap <LEADER>hc :CocCommand clangd.switchSourceHeader<CR>
 
 " coc-snippets
 " Use <C-j> for jump to next placeholder, it's default of coc.nvim
