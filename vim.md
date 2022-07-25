@@ -6120,7 +6120,15 @@ set -g mouse on
 ##### 一些映射
 
 ```
-map :  console                                                                                               map ;  console                                                                                               map !  console shell%space                                                                                   map @  console -p6 shell  %%s                                                                               map #  console shell -p%space                                                                               map s  console shell%space                                                                                   map r  chain draw_possible_programs; console open_with%space                                                 map f  console find%space                                                                                   map cd console cd%space
+map :  console                                                                                               
+map ;  console                                                                                               
+map !  console shell%space                                                                                   
+map @  console -p6 shell  %%s                             
+map #  console shell -p%space                                                                               
+map s  console shell%space                                                                                   
+map r  chain draw_possible_programs; console open_with%space                                                 
+map f  console find%space                                                                           
+map cd console cd%space
 ```
 
 - 上面这些都是默认的配置，在~/.config/ranger/rc.conf中
@@ -6136,14 +6144,23 @@ map :  console                                                                  
     - 这样按V的时候就可以输入文件名直接创建一个文件。
 
 ```
-map cw console rename%space                                                                                 map a  rename_append                                                                                         map A  eval fm.open_console('rename ' + fm.thisfile.relative_path.replace("%", "%%"))                       map I  eval fm.open_console('rename ' + fm.thisfile.relative_path.replace("%", "%%"), position=7)
+map cw console rename%space                                                                                 
+map a  rename_append                                                                                         
+map A  eval fm.open_console('rename ' + fm.thisfile.relative_path.replace("%", "%%"))                       
+map I  eval fm.open_console('rename ' + fm.thisfile.relative_path.replace("%", "%%"), position=7)
 ```
 
 - 上面这组映射是重命名文件名的一组映射，cw是重新命名，a表示在原有的名字上加一些东西，其他的类似
 
 ```
-# Tagging / Marking                                                                                         map t       tag_toggle                                                                                       map ut      tag_remove                                                                                       map "<any>  tag_toggle tag=%any                                                                             map <Space> mark_files toggle=True                                                                           map v       mark_files all=True toggle=True                                                             
-map uv      mark_files all=True val=False                                                                   map V       toggle_visual_mode                                                                           
+# Tagging / Marking                                                                                         
+map t       tag_toggle                                                                                       
+map ut      tag_remove                                                                                       
+map "<any>  tag_toggle tag=%any                                                                             
+map <Space> mark_files toggle=True                                                                           
+map v       mark_files all=True toggle=True                                                             
+map uv      mark_files all=True val=False                                                                   
+map V       toggle_visual_mode                                                                           
 map uV      toggle_visual_mode reverse=True
 ```
 

@@ -37,7 +37,7 @@ set exrc
 set secure
 set number
 set hlsearch
-set relativenumber
+" set relativenumber
 set cursorline
 set hidden
 set expandtab
