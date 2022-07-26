@@ -28,6 +28,7 @@ set autochdir
 set encoding=utf-8
 set nocompatible
 filetype plugin indent on
+syntax on
 
 
 " ===
