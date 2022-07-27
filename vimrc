@@ -358,6 +358,10 @@ Plug 'honza/vim-snippets'
 " Editor Enhancement
 Plug 'jiangmiao/auto-pairs'
 
+" select
+Plug 'gcmt/wildfire.vim'
+Plug 'mg979/vim-visual-multi'
+
 call plug#end()
 
 " ===
@@ -548,3 +552,13 @@ endif
 let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extra=+q']
 let g:gutentags_ctags_extra_args += ['--c++-kinds=+pxI']
 let g:gutentags_ctags_extra_args += ['--c-kinds=+px']
+
+
+" ===
+" === wildfire
+" ===
+nmap <leader>s <Plug>(wildfire-quick-select)
+let g:wildfire_objects = {
+    \ "*" : ["i'", 'i"', "i)", "i]", "i}"],
+    \ "html,xml" : ["at", "it"],
+\ }
