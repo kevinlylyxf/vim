@@ -5832,7 +5832,7 @@ let g:coc_snippet_prev = '<c-k>'
   - 可视化模式
   
     ```
-    S               在整行增加一个配对符号，配对符号单独成行并进行缩进
+    S               在整行增加一个配对符号，配对符号单独成行并进行缩进，这是大写的S，只有大写的S，没有小写的s
     ```
   
     - Finally, let's try out visual mode. Press a capital V (for linewise visual mode) followed by `S<p class="important">`.
