@@ -358,6 +358,7 @@ Plug 'honza/vim-snippets'
 " Editor Enhancement
 Plug 'jiangmiao/auto-pairs'
 Plug 'luochen1990/rainbow'
+Plug 'godlygeek/tabular'
 
 " select
 Plug 'gcmt/wildfire.vim'
@@ -571,3 +572,8 @@ let g:wildfire_objects = {
 " ===
 let g:rainbow_active = 1
 
+
+" ===
+" === tabular
+" ===
+vmap \t :Tabularize /
