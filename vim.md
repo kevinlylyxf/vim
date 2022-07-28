@@ -5871,6 +5871,20 @@ let g:coc_snippet_prev = '<c-k>'
 - If you want to force-disable Gutentags for a given project even though it does match one of the items in gutentags_project_root, create a file named ".notags" at the root of the project.
   - 如果您想强制禁用给定项目的 Gutentags，即使它确实如此匹配gutentags_project_root中的一项，创建一个名为项目根目录下的“.notags”。
 
+#### Vim-visual-multi
+
+- Basic usage:
+  - select words with `Ctrl-N` (like `Ctrl-d` in Sublime Text/VS Code)
+  - create cursors vertically with `Ctrl-Down/Ctrl-Up`
+  - select one character at a time with `Shift-Arrows`
+  - press `n/N` to get next/previous occurrence
+  - press `[/]` to select next/previous cursor
+  - press `q` to skip current and get next occurrence
+  - press `Q` to remove current cursor/selection
+  - start insert mode with `i,a,I,A`
+- 此插件可以按住`Ctrl-Down/Ctrl-Up`创建垂直的选择区域，这个区域和块可视模式是有区别的，这个模式下我们可以使用w，e，b等快速移动一个单词，这个移动可以看作是每行单独移动的，这个移动并不是像块可视一样选择一块区域，而是可以看作每行单独移动，这时模式只是为了移动的，并不是为了选择一块区域。我们可以执行A，在这几个单词后面添加统一的东西，或者I命令在前面添加东西，注意这个并不是块可视模式下的区域，而是我们在很多行下快速移动，例如w命令都往后移动一个单词，每行可以看作是单独的，这时我们可以执行A，在当前光标后面添加一些东西，这些添加的东西是紧跟在每行选择的东西后面的，并不是块可视模式下的固定的框后面添加。
+- 块可视模式下只能在每行的结尾添加一些东西，这时在结尾添加的东西不是固定的，是紧跟在每行的结尾的。但是在中间的某些不规则区域后面统一添加一些东西，例如在不规则的等号后面添加东西，块可视模式就不行了，在中间添加的话，添加到规则区域的后面，意思是只能添加到最大框的后面。这时只能选择上面那种工作模式。
+
 ## Tmux
 
 - tmux官网说的主要使用
