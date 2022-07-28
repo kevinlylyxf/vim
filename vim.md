@@ -3823,6 +3823,8 @@ noremap bo :%bd \| e# \| bd#<cr>
   autocmd Filetype html,xml,xsl source $VIM/vimfile/plugin/closetag.vim
   ```
 
+  - Filetype也是一种类型，只不过其后面跟的是确定的值，就不用匹配符了。
+
 - 可以根据文件类型，设置[键盘映射](https://link.zhihu.com/?target=http%3A//yyq123.github.io/learn-vim/learn-vi-51-KeyMapping.html)：
 
   ```vim
