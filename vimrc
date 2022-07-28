@@ -357,6 +357,7 @@ Plug 'honza/vim-snippets'
 
 " Editor Enhancement
 Plug 'jiangmiao/auto-pairs'
+Plug 'luochen1990/rainbow'
 
 " select
 Plug 'gcmt/wildfire.vim'
@@ -562,3 +563,11 @@ let g:wildfire_objects = {
     \ "*" : ["i'", 'i"', "i)", "i]", "i}"],
     \ "html,xml" : ["at", "it"],
 \ }
+
+
+
+" ===
+" === rainbow
+" ===
+let g:rainbow_active = 1
+
