@@ -291,7 +291,7 @@ noremap \b :Buffers<CR>
 noremap <LEADER>vb :vertical ball<CR>
 
 " close all buffers except the current buffer
-noremap bo :%bd \| e# \| bd#<CR>
+noremap <LEADER>bo :%bd \| e# \| bd#<CR>
 
 
 " ===
