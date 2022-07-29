@@ -277,12 +277,12 @@ noremap tl :+tabmove<CR>
 " ===
 " === Buffers management
 " ===
-noremap <LEADER>d :bdelete %<CR>
-noremap bb :buffers<CR>
-noremap bj :bnext<CR>
-noremap bk :bprevious<CR>
-noremap b, :bfirst<CR>
-noremap b. :blast<CR>
+noremap <LEADER>bd :bdelete %<CR>
+noremap <LEADER>bb :buffers<CR>
+noremap <LEADER>bj :bnext<CR>
+noremap <LEADER>bk :bprevious<CR>
+noremap <LEADER>b, :bfirst<CR>
+noremap <LEADER>b. :blast<CR>
 
 " select buffer
 noremap \b :Buffers<CR>
