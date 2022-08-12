@@ -306,6 +306,12 @@ noremap \f :Files<CR>
 " rg(ripgrep) search result
 noremap \r :Rg<CR>
 
+" query marks
+noremap \m :Marks<CR>
+
+" select windows
+noremap \w :Windows<CR>
+
 
 " ===
 " === Install Plugins with Vim-Plug
