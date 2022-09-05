@@ -40,6 +40,7 @@ set number
 set hlsearch
 " set relativenumber
 set cursorline
+set cursorcolumn
 set hidden
 set expandtab
 set tabstop=4
@@ -378,6 +379,9 @@ call plug#end()
 set background=dark
 " colorscheme molokai
 colorscheme gruvbox
+
+highlight CursorLine   cterm=NONE ctermbg=black ctermfg=green guibg=NONE guifg=NONE
+highlight CursorColumn cterm=NONE ctermbg=black ctermfg=green guibg=NONE guifg=NONE
 
 " ===
 " === coc.nvim
