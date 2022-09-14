@@ -313,6 +313,10 @@ noremap \m :Marks<CR>
 " select windows
 noremap \w :Windows<CR>
 
+" Query the character under the current cursor 
+noremap <LEADER>/ *N
+
+
 
 " ===
 " === Install Plugins with Vim-Plug
