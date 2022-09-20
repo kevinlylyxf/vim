@@ -25,6 +25,8 @@
 ##### vim下$VIMRUNTIME
 
 - 用vim --version命令查看得到的一些变量例如HOME，VIMRUNTIME，这些是vim的变量，并不是环境变量，所以要查看的话需要在vim命令行中echo，这样就对了。
+  - VIMRUNTIME是VIM的安装路径。
+
 
 ##### vim下filetype设置
 
@@ -724,11 +726,46 @@ filetype indent on
   :set mps+=<:>
   ```
 
+  - mps是matchpairs的缩写
+
 - 利用[自动命令](https://link.zhihu.com/?target=http%3A//yyq123.github.io/learn-vim/learn-vi-49-01-autocmd.html)（autocmd），可以针对特定文件类型设置匹配字符。例如针对C和Java代码，增加对于“=”和“;”的匹配：
 
   ```
   :au FileType c,cpp,java set mps+==:;
   ```
+
+- matchpairs的设置只能针对括号、大括号、中括号、尖括号、等于号这种分隔符，对于if、else这种就无能为力了。对于更高级的功能，可以查看matchpairs的帮助手册，可以看到下面这句话
+
+  ```
+  For a more advanced way of using "%", see the matchit.vim plugin in the $VIMRUNTIME/pack/dist/opt/matchit directory.
+  ```
+
+  - 意思是对于更高级的功能，需要使用matchit插件。
+
+- matchit这个插件，是vim自带的，但是默认不安装。在vim中默认可以用%来实现括号之间的跳转，但是有了这个插件可以设置任意想跳转的标记。在vim下使用`h matchit-install`查看帮助手册
+
+  ```
+  To start using the matchit plugin, add one line to your vimrc file:  
+          packadd! matchit
+  ```
+
+- 具体配置时，需要写在vimrc中
+
+  ```
+  let b:match_words = '\<if\>:\<endif\>,'                                                                                                                                                                   
+                  \ . '\<while\>:\<continue\>:\<break\>:\<endwhile\>'
+  ```
+
+  - vim下尖括号表示匹配单词边界，其中尖括号要转义，其他的正则表达式没有这个语法，这个是vim下的正则特有的。如果匹配，if 、else if、else这种，只需要用冒号隔开，因为冒号是一组。
+
+- 使用技巧
+
+  ```
+  %  正向跳转
+  g% 反向跳转
+  ```
+
+  
 
 ###### showmatch
 
