@@ -777,7 +777,37 @@ filetype indent on
   g% 反向跳转
   ```
 
-  
+- ada中匹配if时的配置
+
+  ```
+  packadd! matchit
+  let s:notend  = '\%(\<end\s\+\)\@<!'
+  let s:notor = '\%(\<or\s\+\)\@<!'
+  let b:match_words = s:notend. '\<if\>:\<elsif\>:' . s:notor . '\<else\>:\<end\s\+if\>\s*;'
+        \ . ',' . s:notend . '\<loop\>:\<end\s\+loop\>\s*;'
+        \ . ',' . s:notend . '\<case\>:\<end\s\+case\>\s*;'
+        \ . ',' . '\<begin\>:\<end\(\s\+\(if\|case\|loop\)\@!\w*\)\?;'
+  ```
+
+  - 其中的@<!是正则表达式的意思，要转义，用help可以直接查看
+
+    ```
+    \@<!    \@<!    nothing, requires NO match behind /zero-width
+    ```
+
+    - 意思是在一个正则表达式中不匹配他前面的字符，类似于上面一个冒号分割的都是一个正则表达式。
+
+  - 如果前面只写if会导致end if也匹配进去导致错误，这样就不会匹配同一层级的字符了，要想匹配同一层级的要匹配正确。所以在匹配if的时候要禁止匹配end所以有@<!
+
+  - \%(\) 指定的组将不会被计数，这可以允许我们使用更多的组，并且查找速度也更快。意思是在后面的`\1,\2`中不会使用这个捕获组
+
+    ```
+    :%s/\(Tom\%(mas\|my\)\) \(Young\)/\2, \1/g
+    Prepared by Young, Tommas
+    Prepared by Young, Tommy
+    ```
+
+    - 这个里面有三个捕获组，但是\%后面的不会被后面的计数，所以可以使用更多的捕获组，也查找的更快。前面两个相当于一个。
 
 ###### showmatch
 
