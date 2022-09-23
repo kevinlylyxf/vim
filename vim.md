@@ -837,11 +837,21 @@ filetype indent on
       ```
 
       - 意思是通过filetype-plugin来解决，而不是写进vimrc中。
+      
       - filetype-plugin的意思就是ftplugin，详见上面插件结构目录。这样的原理如下，ftplugin下面的文件是根据filetype的值来加载的，每一个文件都有filetype值，这样就会自动去加载插件，如果我们将局部变量写在里面，这样每打开一个文件就会加载一个ftplugin下面的对应的插件，而不是vimrc刚启动的时候加载一下。这样就可以每一个buffer中都有一个相同的局部变量。
+      
       - 这个写在~/.vim/ftplugin下面对应的脚本文件中就可以，不用写在vimruntime目录下的ftplugin中。这样也可以控制是否加载官方的对应的插件。如果不控制，这样也可以自己目录的ftplugin和官方目录中的ftplugin两个一起加载。
-
+      
+      - 有时候这个ftplugin目录也可以在对应的插件里面，例如
+      
+        ```
+        ./bundle/Ada-Bundle/ftplugin/ada.vim
+        ```
+      
+        - 这个filetype对应的ada就在一个固定的插件目录下的ftplugin中，而不是~/.vim/ftplugin或者是官方的ftplugin中，但是这个我还没遇见过，具体的时候再说，一般是在~/.vim/ftplugin或者是官方的ftplugin中
+  
   - 刚开始的时候觉得是因为packadd插件管理导致的，后来换成vim-plug也是一样，所以不是插件管理造成的，应该是变量的作用域导致的。跟插件管理没关系。
-
+  
     - packadd是vim8以后的版本内置的插件管理方法。
     - [packadd介绍](https://dxsm.github.io/books/vimL/z/20181219_2.html)
     - 也可以用help查看帮助手册。
