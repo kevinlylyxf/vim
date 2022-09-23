@@ -63,6 +63,7 @@ set backspace=indent,eol,start
 " Cancel automatic folding
 "set foldlevelstart=99
 
+set showmatch
 set formatoptions-=tc
 set splitright
 set splitbelow
@@ -376,6 +377,11 @@ Plug 'gcmt/wildfire.vim'
 Plug 'mg979/vim-visual-multi'
 
 call plug#end()
+
+" ===
+" === matchit
+" ===
+packadd! matchit
 
 " ===
 " === colors
