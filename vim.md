@@ -27,6 +27,18 @@
 - 用vim --version命令查看得到的一些变量例如HOME，VIMRUNTIME，这些是vim的变量，并不是环境变量，所以要查看的话需要在vim命令行中echo，这样就对了。
   - VIMRUNTIME是VIM的安装路径。
 
+- 选项变量，和上面的变量不同，选项变量是用set来可以设置的那些系统已经定义好的变量。
+
+  - 你可以像对待一个变量那样来设置和读取一个选项，通过一个特殊的语法。运行下面的命令：
+
+    ```
+    :set textwidth=80
+    :echo &textwidth
+    ```
+
+  - Vim会输出“80” 。在一个名称的前面加上&表示你要引用一个选项的值，而不是一个恰好有相同名称的变量。这个&只会读取选项变量的值，并不会读取普通变量，即使有同名的。类似于runtimepath，packpath都是选项变量。输出时都要加&。
+
+
 
 ##### vim下filetype设置
 
@@ -808,6 +820,32 @@ filetype indent on
     ```
 
     - 这个里面有三个捕获组，但是\%后面的不会被后面的计数，所以可以使用更多的捕获组，也查找的更快。前面两个相当于一个。
+
+  - 关于matchit插件只在当前buffer中可以正常使用，如果用tag跳转到其他buffer中就不可以使用了。这是因为`b:match_words`中的b表示变量是当前缓冲区的变量，即当前buffer，如果跳转到其他buffer中这个变量就不管用了。
+
+    - 也不可以改变match_words的变量作用域，例如将b换成w，这样也是不正确的，因为脚本中只会读取`b:match_words`，并不会读取其他的变量，作用域改变也不行。
+
+    - 上述问题的原因是，vimrc里面的配置在启动的时候加载一下，但是match_words变量的作用域是局部的，所以跳转到其他buffer中就不能使用了。
+
+    - 解决办法，帮助手册里有写
+
+      ```
+      For a new language, you can add autocommands to the script or to your vimrc
+      file, but the recommended method is to add a line such as
+              let b:match_words = '\<foo\>:\<bar\>'
+      to the filetype-plugin for your language.
+      ```
+
+      - 意思是通过filetype-plugin来解决，而不是写进vimrc中。
+      - filetype-plugin的意思就是ftplugin，详见上面插件结构目录。这样的原理如下，ftplugin下面的文件是根据filetype的值来加载的，每一个文件都有filetype值，这样就会自动去加载插件，如果我们将局部变量写在里面，这样每打开一个文件就会加载一个ftplugin下面的对应的插件，而不是vimrc刚启动的时候加载一下。这样就可以每一个buffer中都有一个相同的局部变量。
+      - 这个写在~/.vim/ftplugin下面对应的脚本文件中就可以，不用写在vimruntime目录下的ftplugin中。这样也可以控制是否加载官方的对应的插件。如果不控制，这样也可以自己目录的ftplugin和官方目录中的ftplugin两个一起加载。
+
+  - 刚开始的时候觉得是因为packadd插件管理导致的，后来换成vim-plug也是一样，所以不是插件管理造成的，应该是变量的作用域导致的。跟插件管理没关系。
+
+    - packadd是vim8以后的版本内置的插件管理方法。
+    - [packadd介绍](https://dxsm.github.io/books/vimL/z/20181219_2.html)
+    - 也可以用help查看帮助手册。
+      - packadd和packadd！的区别，packadd！只是将匹配的目录放到runtimepath中，并不会加载插件，所以插件的加载是在vim初始化的时候加载，所以packadd！可以写在vimrc中，而packadd是在命令行中加载插件用的。
 
 ###### showmatch
 
