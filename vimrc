@@ -177,9 +177,9 @@ noremap <silent> K 5k
 noremap <silent> J 5j
 
 " go to the start of the line
-noremap <silent><LEADER>, 0
+noremap <silent><LEADER>, ^
 " go to the end of the line
-noremap <silent><LEADER>. $
+noremap <silent><LEADER>. g_
 
 " Faster in-line navigation
 noremap <silent> W 5w
