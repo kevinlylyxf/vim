@@ -261,6 +261,14 @@ noremap srn <C-w>b<C-w>H
 " Press <SPACE> + q to close the window below the current window
 noremap <LEADER>q <C-w>j:q<CR>
 
+" quickfix shortcut key
+noremap fo :copen<CR>
+noremap fc :cclose<CR>
+noremap fj :cnext<CR>
+noremap fk :cprevious<CR>
+noremap f, :cfirst<CR>
+noremap f. :clast<CR>
+
 
 " ===
 " === Tab management
