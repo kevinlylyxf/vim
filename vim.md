@@ -4021,6 +4021,303 @@ noremap bo :%bd \| e# \| bd#<cr>
 
 ### 代码开发
 
+##### 配色方案
+
+- Vim通过配色方案（Color Scheme）来定义使用不同颜色显示不同的语法元素。
+- Vim有两种显示模式：一种是背景为浅色，而另一种是背景为深色。在启动时，Vim会检测使用的是哪一种背景颜色，然后再应用语法高亮的配色方案。我们可以使用:set background?命令，查看当前使用的背景颜色。也可以使用:set background=light或:set background=dark命令，来指定背景颜色。注意：必须在启用语法高亮之前，设置背景色彩。
+
+##### 色彩测试
+
+###### GVim中的色彩测试
+
+- 运行以下内置脚本（Vimscript），可以查看各种颜色作为前景（foreground）和背景（background）的显示效果，以及在浅色（white）和深色（black）背景下的显示效果。
+
+  ```vim
+  :runtime syntax/colortest.vim
+  ```
+
+  <img src="https://pic3.zhimg.com/80/v2-3f1c38cead95ae8b49d2699b959921ea_720w.webp" style="zoom: 80%;" />
+
+  - 这个显示就是不同的颜色作为前景色和背景色的区别，分别作为前景色和背景色的时候也有黑白两种情况，例如red，前两种red_on_white和red_on_black就是red作为字体颜色也就是前景色分别在黑色的背景和白色的背景下的区别。后两种white_on_red和black_on_red就是red作为背景色，白色字体和黑色字体作为前景色的区别。
+  - 这个在vim中和Gvim中都能使用。
+
+- 通过以下内置文件，可以查看Vim预定义的色彩名称：
+
+  ```vim
+  :view $VIMRUNTIME/rgb.txt
+  ```
+
+  - view是以只读模式打开文件
+
+    ![](https://pic3.zhimg.com/80/v2-6998e365521b0a92bf7a32e0d0343af2_720w.webp)
+
+  - 这个可以在GVim中和Vim中都能使用
+
+- 你可以下载并在GVim中打开[colorname.vim](https://link.zhihu.com/?target=https%3A//yyq123.github.io/learn-vim/samples/colorname.vim)，然后执行`:so %`命令。此脚本文件将新建缓冲区，显示rgb.txt文件中色彩的显示效果：
+
+  <img src="https://pic4.zhimg.com/80/v2-be94e389fb7f84a4b898bbf1e54f30e3_720w.webp" style="zoom:67%;" />
+
+  - 这个只有在GVim中才能使用，在VIM中不能使用，vim中没有颜色的显示，只有文字。
+
+- 你可以下载并在GVim中打开[colorlist.vim](https://link.zhihu.com/?target=https%3A//yyq123.github.io/learn-vim/samples/colorlist.vim)，然后执行`:so %`命令。此脚本文件将以紧凑列表的形式，显示rgb.txt文件中色彩的显示效果：
+
+  ![](https://pic3.zhimg.com/80/v2-af587dd6f8fccd7c7c7eb482bcfb990a_720w.webp)
+
+  - 这个只有在GVim中才能使用，在VIM中不能使用，vim中没有颜色的显示，只有文字。
+
+###### Terminal中的色彩测试
+
+- 现今，几乎所有虚拟终端（比如[GNOME Terminal](https://link.zhihu.com/?target=https%3A//wiki.gnome.org/Apps/Terminal)，[iTerm2](https://link.zhihu.com/?target=https%3A//iterm2.com/)，[ConEmu](https://link.zhihu.com/?target=https%3A//conemu.github.io/)等）都是支持256 (Xterm)色的。
+
+- 在终端中执行以下命令，可以查看256色的显示效果：
+
+  ```bash
+  $ curl -s https://gist.githubusercontent.com/HaleTom/89ffe32783f89f403bba96bd7bcd1263/raw/ | bash
+  ```
+
+![](https://pic1.zhimg.com/80/v2-5b0da376bad4e4f6671c93c9f6a6fa0c_720w.webp)
+
+- 为了启用256色，请在[vimrc](https://link.zhihu.com/?target=http%3A//yyq123.github.io/learn-vim/learn-vi-59-vimrc.html)配置文件的[colorscheme](https://link.zhihu.com/?target=http%3A//yyq123.github.io/learn-vim/learn-vi-62-ColorScheme.html)配色方案设置之前增加以下命令：
+
+  ```vim
+  set t_Co=256
+  ```
+
+- 你可以在[256 COLORS - CHEAT SHEET](https://link.zhihu.com/?target=https%3A//jonasjacek.github.io/colors/)中，查看256色的Xterm Number和Xterm Name，以及与HEX和RGB格式的对应关系：
+
+  <img src="https://pic2.zhimg.com/80/v2-6411b944d8d16ae9f1b9e3d9d5f0a171_720w.webp" style="zoom:67%;" />
+
+- 也就是说，在您选择使用特定色彩时，需要同时考虑在GUI图形界面和Xterm虚拟终端中的显示效果，以便能够获得理想且一致的感官。换句话说，在图形界面中可以正常显示的色彩，可能并无法在虚拟终端中使用。当然，您也可以针对不同的使用环境，选择使用不同的色彩。
+
+##### 语法高亮
+
+- 我们可以使用:highlight命令，查看当前的语法高亮设定。
+
+  ![](https://pic3.zhimg.com/80/v2-2dc6743659dd5d599f7f802e15dc730a_720w.webp)
+
+- 可以使用以下命令修改语法高亮显示：
+
+  ```vim
+  :highlight group definition
+  ```
+
+  - 其中*group*是指语法元素，例如：
+    - Cursor，光标下的字符
+    - Directory，目录名称
+    - ErrorMsg，在最底行显示的错误信息
+    - IncSearch，增量(Incremental)查找的匹配结果
+    - ModeMsg，在左下角显示的模式名称
+    - MoreMsg，显示更多信息时的提示
+    - Visual，在可视化模式下被选中的文本
+  - 上面这些group是vim定义好的，当然也可以自己定义，用命令:h highlight可以看到这些group
+  - 使用以下命令，可以查看关于group的帮助信息：
+
+  ```text
+  :help group-name
+  ```
+
+  - 而*definition*是指具体定义。例如以下命令，将定义黄底黑字的终端：
+
+  ```vim
+  :highlight Normal ctermfg=black ctermbg=yellow
+  ```
+
+  - 在命令中没有指定的参数，将保持其原有的定义。例如以下命令，将背景定义为白色，而前景颜色不变：
+
+    ```text
+    :highlight Normal\ ctermbg=white
+    ```
+
+- Vim识别三种不同的终端：**term**，黑白终端；**cterm**，彩色终端；**gui**，Gvim窗口。
+
+  - **term**，可以定义其字体显示为：bold、underline、reverse、italic或standout。例如以下命令，用逗号来组合使用这些属性：
+
+    ```vim
+    :highlight Keyword term=reverse,bold
+    ```
+
+  - **cterm**，可以用*ctermfg*设置前景色；用*ctermbg*设置背景色。例如以下命令，定义蓝底红字并使用下划线来显示注释：
+
+    ```text
+    :highlight Comment cterm=underline ctermfg=red ctermbg=blue
+    ```
+
+  - **gui**，可以使用选项gui=attribute，来定义图形窗口下语法元素的显示属性。选项*guifg*和*guibg*，用来定义了前景色和背景色。推荐使用的颜色包括：black, brown, grey, blue, green, cyan, magenta, yellow, white。
+
+  - 为了保持各平台下的一致性，我们应该使用[十六进制颜色代码](https://link.zhihu.com/?target=http%3A//zh.wikipedia.org/zh/%E7%BD%91%E9%A1%B5%E9%A2%9C%E8%89%B2%E6%A8%A1%E5%BC%8F%23.E5.8D.81.E5.85.AD.E8.BF.9B.E5.88.B6.E6.95.B0.E5.AD.97.E8.A1.A8.E7.A4.BA.E6.96.B9.E6.B3.95)来指定颜色。例如使用以下命令，一次定义几种终端下的配色：
+
+    ```text
+    :highlight Error term=reverse cterm=blod ctermfg=#00afff ctermbg=#a8a8a8
+    ```
+
+- 利用[Colorizer](https://link.zhihu.com/?target=https%3A//github.com/lilydjwg/colorizer)插件可以直观的显示#rgb, #rgba, #rrggbb, #rrgbbaa, rgb(...), rgba(...)等等形式的配色。
+
+  ![](https://pic4.zhimg.com/80/v2-fa2b48c142493f1abf732dbdfec3936b_720w.webp)
+
+###### 定义语法高亮
+
+- 在系统排错过程中，常常需要在日志文件里大海捞针。面对数量巨大的繁杂信息，如何快速准确地找到线索，就显得格外重要了。
+
+- 利用[语法高亮度(Syntax)](https://link.zhihu.com/?target=http%3A//yyq123.github.io/learn-vim/learn-vi-64-Syntax.html)，可以突出显示重要的信息，比如：
+
+  - 包含“Error”和“Fail”等关键词的报错信息；
+  - 日期、网址、文件名等对象；
+  - 数字、字符串、操作符等元素。
+
+- 定义语法高亮度
+
+  - 首先，定义需要着重显示的文本内容：
+
+  - 匹配指定的关键字：
+
+    ```vim
+    syn keyword logLevelError error fail failure
+    ```
+
+  - 匹配特定模式的字符串：
+
+    ```vim
+    syn match logDate 'd{2}/d{2}/d{4}s*d{2}:d{2}:d{2}'
+    ```
+
+  - 然后，定义如何显示特定的文本内容：
+
+  - 将以上定义的语法高亮组，链接到[配色方案](https://link.zhihu.com/?target=http%3A//yyq123.github.io/learn-vim/learn-vi-62-ColorScheme.html)定义过的语法高亮组：
+
+    ```vim
+    hi def link logLevelError ErrorMsg
+    ```
+
+  - 也可以直接定义文本的显示色彩：
+
+    ```vim
+    hi def logLevelError guifg=#ddddff guibg=#444444
+    ```
+
+- 配置语法高亮度
+
+  - 首先，将[语法高亮文件](https://link.zhihu.com/?target=https%3A//github.com/yyq123/vim-syntax-logfile)，放置在以下目录：
+
+    - Linux: `$HOME/.vim/syntax`
+    - Windows: `$HOME/vimfiles/syntax`
+
+  - 然后，在[vimrc](https://link.zhihu.com/?target=http%3A//yyq123.github.io/learn-vim/learn-vi-59-vimrc.html)配置文件中增加以下命令，以侦测.log为后缀名的日志文件并启用语法高亮度：
+
+    ```vim
+    au BufNewFile,BufRead *.log setfiletype log
+    ```
+
+- 对于动辄百兆的大型日志文件，Vim并非理想的工具。通常情况下：首先，利用[tail](https://link.zhihu.com/?target=https%3A//tldr.ostera.io/tail)和[grep](https://link.zhihu.com/?target=https%3A//tldr.ostera.io/grep)等命令，将日志文件截取为较小的片段；然后，再使用Vim进行细致地分析。
+
+##### 语法高亮文件
+
+- 我们可以使用`:syntax enable`命令，启用语法高亮度。Vim将会自动识别关键字、字符串以及其他语法元素，并以不同的颜色显示出来。如果不希望高亮显示语法元素，可以使用`:syntax clear`命令关闭此功能。
+- 以上命令只在当前文件中有效。而`set syntax=off`命令，则会关闭所有缓冲区中文件的语法高亮度；使用`:syntax on`命令，则会针对所有缓冲区中的文件启用语法高亮度。
+
+###### 识别文件
+
+- Vim通过识别文件的扩展名来选择相应的语法高亮显示。如果没有使用传统的扩展名，那么就需要设置filetype选项，来告诉Vim正在编辑的文件类型。例如使用以下命令，告诉Vim我们正在编辑一个C程序文件：
+
+  ```vim
+  :set filetype=c
+  ```
+
+###### 修改语法文件
+
+- 语法高亮显示，是由位于*$VIMRUNTIME/syntax/language.vim*中的语法文件来控制的。主要经过两步来实现：首先，确定需要格式化的字符；然后，定义如何显示这些字符（请参看[配色方案](https://link.zhihu.com/?target=http%3A//yyq123.blogspot.com/2011/02/vim-color-scheme.html)）。
+
+- 例如以下命令，将所有FIX和ENDFIX关键字显示为特定颜色：
+
+  ```vim
+  :syntax match cscFix "FIX\|ENDFIX"
+  :highlight cscFix ctermfg=cyan guifg=#00FFFF
+  ```
+
+  - 其中，第一条命令，创建名为cscFix的匹配模式；第二条命令，使用青色显示匹配的文本。
+
+- 而以下命令，将使用预定义的格式来显示文本：
+
+  ```vim
+  sy keyword cscCondition IF ELSE ENDIF ELSEIF
+  hi def link cscConditionStatement
+  ```
+
+  - 其中，第一条命令，定义包含特定关键字的匹配模式；第二条命令，链接该模式到已存在的格式设置。
+
+- 通过以下命令，可以获得语法高亮度的帮助信息：
+
+  ```vim
+  :help syntax
+  :help usr_44.txt
+  ```
+
+- syntax后面可以跟三种
+
+  ```
+  syntax Keyword  匹配关键字
+  syntax Match   正则匹配
+  syntax Region  区域匹配
+  ```
+
+###### 语法文件示例
+
+- 关于start和end用斜杠包围的解释
+
+  ```
+  In the syntax commands, a pattern must be surrounded by two identical
+  characters.  This is like it works for the ":s" command.  The most common to
+  use is the double quote.  But if the pattern contains a double quote, you can
+  use another character that is not used in the pattern.  Examples:
+    :syntax region Comment  start="/\*"  end="\*/"
+    :syntax region String   start=+"+    end=+"+   skip=+\\"+
+  
+  在语法命令中，一个模式必须被两个相同的字符包围。 这就像它适用于 ":s" 命令。 最常用的是双引号。 但如果模式包含双引号，您可以使用模式中未使用的另一个字符。 例子：
+  
+  说明可以用任何两个相同的字符包围，不一定是引号。但是一般是引号
+  ```
+
+- 使用以下命令，匹配代码的开头和结尾，可用于识别代码注释：
+
+  ```vim
+  :syntax region myComments start=/\/\*/ end=/\*\//
+  ```
+
+- 即使在限定的区域内，我们仍然可以使用以下命令，来格式化特定的语法元素：
+
+  ```vim
+  :syntax keyword myToDo FIXME TODO
+  :syntax region myComments start=/\/\*/ end=/\*\// contains=myToDo
+  ```
+
+  - 其中，第一条命令，定义包含TODO关键字的匹配模式；第二条命令，说明在注释中包含高亮显示的待办事宜。
+
+    ![](https://pic1.zhimg.com/80/v2-e67559607fe9bf31c6258c9346f8b290_720w.webp)
+
+  - 当然，在*contains*中可以指定用逗号分隔的多个包含项。这些语法组因而被允许包含在本项目里。这使得匹配和区域的递归嵌套成为可能。在contains参数中，还可以包含以下特殊关键字：下面说的包含列表为contains=后面列出来的名字
+
+    - **contains=ALL** 如果唯一在包含列表里出现的名字是"ALL"，那么本项目里可以包含所有的组；
+    - **contains=ALLBUT,{group-name}...** 如果包含列表的第一个名字是"ALLBUT"，那么除了列出的组以外，所有其它的组都可以出现在本项目里。使用`:help group-name`命令，可以查看预定义组的帮助信息。
+    - **contains=CONTAINED** 如果包含列表的第一个名字是 "CONTAINED"，那么所有包含"contained" 参数的组都可以接受。
+    - **contains=TOP** 如果包含列表的第一个名字是"TOP"，那么所有不包含"contained"参数的组都可以接受。
+
+  - 例如，以下命令将选择myComments以外的所有组：
+
+    ```vim
+    :syntax region myCodeblock start=/{/ end=/}/ contains=ALLBUT,myComments
+    ```
+
+  - 我们还可以使用以下命令，将多个group组合成一个cluster：
+
+    ```vim
+    :syntax cluster myCluster contains=myKeywords,myConditions
+    ```
+
+  - 通过在cluster名称之前加上@符号，就可以在命令中引用它们：
+
+    ```vim
+    :syntax region myComments start=/\/\*/ end=/\*\// contains=@myCluster
+    ```
+
 ##### 非可见字符
 
 - 默认情况下，Vim是不会显示space,tabs,newlines,trailing space,wrapped lines等不可见字符的。我们可以使用以下命令打开*list*选项，来显示非可见字符：
