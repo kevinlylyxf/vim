@@ -282,6 +282,18 @@ alias unproxy='unset all_proxy && unset http_proxy && unset https_proxy'
     npm config set registry https://registry.npmjs.org/
     ```
 
+  - coc.nvim用的是nodejs，其中coc的插件用的是npm来下载的，所以需要配置npm的源，如果可以翻墙就不需要配置了，如果翻不出去就配置成淘宝的源。
+
+    - Node.js 是一个JavaScript 运行时，它让JavaScript 脱离了浏览器环境，可以直接在计算机上运行，极大地拓展了JavaScript 用途。
+
+  - npm(Node.js Package Manager)是一个Node.js的包管理工具，用来解决Node.js代码部署问题。在安装Node.js时会自动安装相应的npm版本,不需要单独安装。使用npm包管理工具可以解决如下场景的需求。
+
+    (1）从npm服务器下载别人编写的第三方包到本地使用。
+
+    (2）从npm服务器下载并安装别人编写的命令程序到本地使用。
+
+    (3）将自己编写的包或命令行程序上传到npm服务器供别人使用。
+
 - 安装clang
 
   ```
