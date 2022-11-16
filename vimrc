@@ -400,8 +400,8 @@ set background=dark
 " colorscheme molokai
 colorscheme gruvbox
 
-highlight CursorLine   cterm=NONE ctermbg=black ctermfg=green guibg=NONE guifg=NONE
-highlight CursorColumn cterm=NONE ctermbg=black ctermfg=green guibg=NONE guifg=NONE
+highlight CursorLine   cterm=NONE ctermbg=NONE ctermfg=green guibg=NONE guifg=NONE
+highlight CursorColumn cterm=NONE ctermbg=NONE ctermfg=green guibg=NONE guifg=NONE
 
 " ===
 " === coc.nvim
