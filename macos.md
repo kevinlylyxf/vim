@@ -48,6 +48,120 @@ alias unproxy='unset all_proxy && unset http_proxy && unset https_proxy'
 ---
 - mac下lyl目录在/Users/lyl，linux在/home/lyl，两者不一样，cd ～直接切换到lyl目录
 
+#### homebrew
+
+##### 术语
+
+```
+formula
+    Homebrew package definition built from upstream sources
+cask
+    Homebrew package definition that installs macOS native applications
+keg
+    installation destination directory of a given formula version e.g. /usr/local/Cellar/foo/0.1
+rack
+    directory containing one or more versioned kegs e.g. /usr/local/Cellar/foo
+keg-only
+    a formula is keg-only if it is not symlinked into Homebrew´s prefix (e.g. /usr/local)
+cellar
+    directory containing one or more named racks e.g. /usr/local/Cellar
+Caskroom
+    directory containing one or more named casks e.g. /usr/local/Caskroom
+external command
+    brew subcommand defined outside of the Homebrew/brew GitHub repository
+tap
+    directory (and usually Git repository) of formulae, casks and/or external commands
+bottle
+    pre-built keg poured into the cellar/rack instead of building from upstream sources
+```
+
+- formula就是那些需要下载源文件编译的程序，一般为命令行的程序
+- cask就是本地应用程序，带界面的，例如tabby就是cask
+- key就是在/opt/homebrew/Cellar/fzf/0.29.0每一个程序里面都有一个版本号
+- Caskroom和cellar在同一级目录，Caskroom放的是cask，例如tabby就在caskroom里面
+- tap就是第三方仓库
+- bottle就是提前编译好的二进制程序。
+
+##### 命令
+
+###### brew list
+
+```
+list
+   List all installed formulae.   包括cask
+
+brew list
+==> Formulae
+berkeley-db	cscope		gettext		libev		libssh2		lua		node		perl		ranger		rtmpdump	tmux		xz
+brotli		fd		icu4c		libevent	libunistring	mpdecimal	openldap	python-tk@3.9	readline	ruby		universal-ctags	zstd
+c-ares		fzf		jansson		libidn2		libuv		ncurses		openssl@1.1	python@3.10	rename		sqlite		utf8proc
+ca-certificates	gdbm		jemalloc	libnghttp2	libyaml		nghttp2		pcre2		python@3.9	ripgrep		tcl-tk		vim
+
+==> Casks
+font-hack-nerd-font	tabby
+```
+
+###### brew install
+
+```
+install [options] formula|cask [...]
+       Install a formula or cask. Additional options specific to a formula may be appended to the command.
+
+--formula  Treat all named arguments as formulae.
+--cask Treat all named arguments as casks.
+```
+
+- brew install命令可以不带任何参数安装formula或者cask，但是也可以带参数，--formula表示后面安装的都是formula，--cask表示后面跟的都是cask
+
+###### brew tap
+
+```
+tap [options] [user/repo] [URL]
+   Tap a formula repository.
+   If no arguments are provided, list all installed taps.
+   With URL unspecified, tap a formula repository from GitHub using HTTPS. Since so many taps are hosted on GitHub, this command is a shortcut for brew tap user/repo   https://github.com/user/homebrew-repo.
+```
+
+- brew tap可以为brew的软件的 跟踪,更新,安装添加更多的的tap formulae
+
+- 如果你在核心仓库没有找到你需要的软件,那么你就需要安装第三方的仓库去安装你需要的软件
+
+- tap命令的仓库源默认来至于Github
+
+- `brew tap <user>/<repo>` 在本地对这个 `https://github.com/user/repo` 仓库上做了一个浅度的克隆，完成之后 `brew`就可以在这个仓库包含的`formulae`上工作,好比就在`Homebrew`规范的仓库,你可使用`brew install` 或者`brew uninstall `安装或者卸载这个仓库上的软件。当你执行`brew update`这个命令时，`tap` 和 `formulae` 就会自定更新
+
+- `brew untap <user>/<repo> [<user>/<repo> <user>/<repo> ...]` 移除已经安装的`tap`.这个仓库被删除,`brew`就不在可用在这个仓库的`formulae`.可以同时删除几个仓库
+
+- 仓库命令的规范
+
+  - 在 `Github`上,你的仓库名称必须是`homebrew-something`,为了使用一个参数的`brew tap`命令,`homebrew-`这个前缀不是可选的,是必须的。
+  - 当你在命令行使用`brew tap`时，你可以省略`homebrew-`这个前缀的
+  - 也就是说:`brew tap username/foobar`是作为长版本`brew tap username/homebrew-foobar`使用的一个简写
+  - 也就是说在github仓库上的名字是需要有homebrew-这个前缀的，而在命令行brew tap命令是不需要的，brew程序会自己加上的
+  - username是不用管大小写的，只要字母一样，brew就会找到正确的仓库。
+
+  ```
+  brew tap homebrew/cask-fonts
+  brew install --cask font-hack-nerd-font
+  
+  https://github.com/Homebrew/homebrew-cask-fonts
+  
+  从这可以看出，仓库是有homebrew前缀的，而且username是可以不用管大小写的。
+  ```
+
+###### brew update
+
+```
+update [options]
+       Fetch the newest version of Homebrew and all formulae from GitHub using git(1) and perform any necessary migrations.
+```
+
+- Homebrew 经常会在执行命令的时候触发更新，不过如果你想要主动检查更新，可以执行 `brew update` 来唤起 Homebrew 的更新。
+
+###### brew upgrade
+
+- 使用 `brew upgrade` 来更新所有的软件，或者是使用 `brew upgrade [软件名]`来更新单个软件。
+
 ### manjaro
 
 - manjaro报错缺少运行库libcrypt.so.1时解决办法
