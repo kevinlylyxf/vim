@@ -6091,6 +6091,9 @@ noremap bo :%bd \| e# \| bd#<cr>
 - CocList自带fuzzy模糊匹配，我们可以在里面进行搜索，wildmenu和CocList没有关系
 - 如果我们使用CocCommand来查看命令按tap就是我们匹配的那些命令此时只能使用tap来选择或者手打，如果使用coclist commands来查看就是可以模糊匹配这些命令，此时就可以输入关键字来匹配。
 
+- coc-settings.json文件是用json配置的，里面的配置项可以是用`:h coc-config`来看参数配置
+  - coc-settings.json文件的默认位置是~/.vim/coc-settings.json
+
 ##### coc extensions和lsp server
 
 ###### LSP
