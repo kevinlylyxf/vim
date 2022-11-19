@@ -613,3 +613,5 @@ vmap \t :Tabularize /
 " ===
 " disable all LSP features in ALE
 let g:ale_disable_lsp = 1
+let g:ale_sign_error = "\uf467"
+let g:ale_sign_warning = "\uf071"
