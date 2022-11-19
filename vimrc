@@ -336,6 +336,9 @@ call plug#begin('~/.vim/plugged')
 " Auto Complete
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
+" Diagnostics 
+Plug 'dense-analysis/ale'
+
 " fzf
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
@@ -603,3 +606,10 @@ let g:rainbow_active = 1
 " === tabular
 " ===
 vmap \t :Tabularize /
+
+
+" ===
+" === ale
+" ===
+" disable all LSP features in ALE
+let g:ale_disable_lsp = 1
