@@ -259,6 +259,80 @@ update [options]
     - 输入法切换键就是在循环切换激活的输入法，并不会切换第一个非激活输入法
     - 输入法快捷键自定义的时候要注意按键抬起的顺序，例如设置为ctrl+space，此时自定义的时候要先按ctrl在按space，然后先抬起space在抬起ctrl，这样就能设置成功。
 
+##### xclip
+
+- 在使用 Linux 桌面工作时，你通常如何复制全部或部分文本？你可能会在文本编辑器中打开文件，选择全部或仅选择要复制的文本，然后将其粘贴到其他位置。这样没问题。但是你可以使用 [xclip](https://github.com/astrand/xclip) 在命令行中更有效地完成工作。`xclip` 提供了在终端窗口中运行的命令与 Linux 图形桌面环境中的剪贴板之间的管道。
+
+- 这个命令好处如下：例如我们需要拷贝一个文件的内容到另一个文件中间使用，我们可以 用vim打开文件然后从上到下用鼠标拷贝，这样就很麻烦，如果vim有clipboard特性的话也可以使用vim的系统剪切板特性来操作，如果没有的话只能用鼠标拷贝这样很麻烦，但是有这个命令之后我们可以cat filename | xclip -sel clip这样我们就将内容直接拷贝到系统剪切板，然后使用ctrl-v来在想用的地方粘贴上就可以了。
+
+  - 另外例如pwd或者grep这些命令输出的内容，我们可以在终端上用鼠标复制，然后在ctrl-v来粘贴，但是这样太麻烦，我们可以在pwd或者grep输出的时候直接粘贴到系统剪切板，这样我们就能直接使用了。
+
+    ```
+    pwd | xclip
+    grep "something" | xclip
+    ```
+
+- 搭配一些tail命令就更加方便了
+
+- xclip主要是将内容复制到系统剪切板这个操作，从剪切板到文件中用鼠标右键或者ctrl-v来实现，xclip命令只能搭配-o选项输出到终端中，并不能输出到文件中。
+
+  - 我们最复杂的其实是复制到系统剪切板，这个命令提供了这个功能，粘贴的功能用鼠标右键或者ctrl-v都能实现
+
+- 基本使用
+
+  ```
+  Usage: xclip [OPTION] [FILE]...
+  Access an X server selection for reading or writing.
+  
+    -i, -in          read text into X selection from standard input or files
+                     (default)
+    -o, -out         prints the selection to standard out (generally for
+                     piping to a file or program)
+    -l, -loops       number of selection requests to wait for before exiting
+    -d, -display     X display to connect to (eg localhost:0")
+    -h, -help        usage information
+        -selection   selection to access ("primary", "secondary", "clipboard" or "buffer-cut")
+        -noutf8      don't treat text as utf-8, use old unicode
+        -target      use the given target atom
+        -rmlastnl    remove the last newline charater if present
+        -version     version information
+        -silent      errors only, run in background (default)
+        -quiet       run in foreground, show what's happening
+        -verbose     running commentary
+  ```
+
+  - 默认是-i，可加可不加，将文件或标准输入读入剪切板中(终端剪切板即xclip自己的剪切板)
+
+    ```
+    xclip somefile
+    或者
+    xclip -i somefile
+    
+    cat somefile | xclip
+    echo "somewords" | xclip
+    grep 'somewords' | xclip
+    tail -10 | xclip
+    ```
+
+    - 只要是能输出到终端的命令都可以使用管道来将内容复制到剪切板例如
+
+      ```
+      pwd | xclip
+      ```
+
+  - -o选项，将xclip的剪切板的内容输出到终端中，不是系统剪切板。
+
+  - -l指定可粘贴次数，默认为0，即不限次数
+
+    ```
+    xclip -l 4
+    ```
+
+  - 之前使用的是 X11 primary selection area (clipboard)，这个不能使用右键来粘贴，因为没有使用系统剪切板，使用的是xclip自己的剪切板，使用`-selection`参数，或者简写`-sel c或者-sel clip`指定系统剪切板。
+
+    ```
+    xclip -sel clip somefile
+    ```
 
 ##### python
 
