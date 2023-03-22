@@ -6480,6 +6480,23 @@ let g:coc_snippet_prev = '<c-k>'
 
 - 这个命令中的c主要是用来控制分隔符周边空格的添加的，例如，左对齐之后l2，左对齐添加两个空格，右对齐r2，右对齐添加两个空格，但是分隔符右边就不能添加空格了，所以c2，就能在分隔符后边添加空格。
 
+
+#### AutoComplPop
+
+- AutoComplPop 是按字典进行补全的，只有你输入过的单词才可以补全，默认只有输入两个字符，才会提示，并且提示内容没有颜色，你可以根据自己的喜欢做如下配置：
+
+  ```
+  "输入一个字母即可补全
+  let g:acp_behaviorKeywordLength = 1
+  " 自动弹出是由键映射，对于通过移动来避免自动弹出是很有用
+  let g:AutoComplPop_MappingDriven = 1
+  " 修改GUI高亮参数 该设置全局有效
+  hi Pmenu guibg=#444444
+  hi PmenuSel ctermfg=7 ctermbg=4 guibg=#555555 guifg=#ffffff
+  ```
+
+- coc-nvim其实也可以补全提示，如果没有coc-nvim可以安装这个插件进行补全提示。
+
 ## Tmux
 
 - tmux官网说的主要使用
