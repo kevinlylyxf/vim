@@ -228,7 +228,9 @@ noremap <LEADER>h <C-w>h
 noremap <LEADER>H <C-w>H
 noremap <LEADER>l <C-w>l
 noremap <LEADER>L <C-w>L
-noremap <LEADER>o <C-w>o
+" close window
+noremap <LEADER>o <C-w>o  "close all window except the current window
+noremap <LEADER>c <C-w>c  "close the current window
 " new window
 noremap <LEADER>n :vnew<CR>
 " put the current window in a new tab
@@ -282,6 +284,20 @@ noremap tk :+tabnext<CR>
 " Move the tabs with tmn and tmi
 noremap th :-tabmove<CR>
 noremap tl :+tabmove<CR>
+
+" Move tab number to first or last
+noremap t, :tabfirst<CR>
+noremap t. :tablast<CR>
+
+" Close the current tab
+noremap tc :tabclose<CR>
+
+" put the current window in a new tab
+" noremap <LEADER>T <C-w>T
+
+" close the current window, if current window is last, the tab will be closed
+" noremap <LEADER>c <C-w>c  "close the current window
+
 
 
 " ===
