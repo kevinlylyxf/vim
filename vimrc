@@ -230,7 +230,6 @@ noremap <LEADER>l <C-w>l
 noremap <LEADER>L <C-w>L
 " close window
 noremap <LEADER>o <C-w>o  "close all window except the current window
-noremap <LEADER>c <C-w>c  "close the current window
 " new window
 noremap <LEADER>n :vnew<CR>
 " put the current window in a new tab
@@ -279,8 +278,8 @@ noremap f. :clast<CR>
 noremap ti :tabe<CR>
 noremap tI :tab split<CR>
 " Move around tabs with tn and ti
-noremap tj :-tabnext<CR>
-noremap tk :+tabnext<CR>
+noremap tj :+tabnext<CR>
+noremap tk :-tabnext<CR>
 " Move the tabs with tmn and tmi
 noremap th :-tabmove<CR>
 noremap tl :+tabmove<CR>
