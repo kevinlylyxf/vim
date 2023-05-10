@@ -1,3 +1,5 @@
+[tmux](#tmux)
+
 ### 	基础理解
 
 ##### vim插件介绍以及vimL语言的编写
@@ -6513,6 +6515,86 @@ let g:coc_snippet_prev = '<c-k>'
 
 - coc-nvim其实也可以补全提示，如果没有coc-nvim可以安装这个插件进行补全提示。
 
+## Markdown
+
+### 关于在md头部生成目录TOC
+
+- TOC，它的全称是table of content
+
+##### github示例
+
+- 通过查看fzf的Readme.md，查看源码如下
+
+  ```
+  <!-- vim-markdown-toc GFM -->
+  
+  * [Installation](#installation)
+      * [Using Homebrew](#using-homebrew)
+      * [Using git](#using-git)
+      * [Using Linux package managers](#using-linux-package-managers)
+      * [Windows](#windows)
+      * [As Vim plugin](#as-vim-plugin)
+  * [Upgrading fzf](#upgrading-fzf)
+  * [Building fzf](#building-fzf)
+  * [Usage](#usage)
+      * [Using the finder](#using-the-finder)
+      * [Layout](#layout)
+      * [Search syntax](#search-syntax)
+      * [Environment variables](#environment-variables)
+      * [Options](#options)
+      * [Demo](#demo)
+  * [Examples](#examples)
+  * [`fzf-tmux` script](#fzf-tmux-script)
+  * [Key bindings for command-line](#key-bindings-for-command-line)
+  * [Fuzzy completion for bash and zsh](#fuzzy-completion-for-bash-and-zsh)
+      * [Files and directories](#files-and-directories)
+      * [Process IDs](#process-ids)
+      * [Host names](#host-names)
+      * [Environment variables / Aliases](#environment-variables--aliases)
+      * [Settings](#settings)
+      * [Supported commands](#supported-commands)
+      * [Custom fuzzy completion](#custom-fuzzy-completion)
+  * [Vim plugin](#vim-plugin)
+  * [Advanced topics](#advanced-topics)
+      * [Performance](#performance)
+      * [Executing external programs](#executing-external-programs)
+      * [Turning into a different process](#turning-into-a-different-process)
+      * [Reloading the candidate list](#reloading-the-candidate-list)
+          * [1. Update the list of processes by pressing CTRL-R](#1-update-the-list-of-processes-by-pressing-ctrl-r)
+          * [2. Switch between sources by pressing CTRL-D or CTRL-F](#2-switch-between-sources-by-pressing-ctrl-d-or-ctrl-f)
+          * [3. Interactive ripgrep integration](#3-interactive-ripgrep-integration)
+      * [Preview window](#preview-window)
+  * [Tips](#tips)
+      * [Respecting `.gitignore`](#respecting-gitignore)
+      * [Fish shell](#fish-shell)
+  * [Related projects](#related-projects)
+  * [License](#license)
+  
+  <!-- vim-markdown-toc -->
+  ```
+
+  - 其实就是一个超链接，然后小括号里面加上一个#然后加上标题名，注意缩进。
+
+##### typora生成TOC
+
+```
+在开头输入[TOC] 然后按回车，就会自动生成
+```
+
+##### vim生成TOC
+
+- 可以通过插件vim-markdown-toc来生成。
+
+### Markdown语法
+
+#### 列表
+
+##### 无序列表
+
+- 要创建无序列表，请在每个列表项前面添加破折号 (-)、星号 (*) 或加号 (+) 。缩进一个或多个列表项可创建嵌套列表。
+- 无序列表使用星号(*****)、加号(**+**)或是减号(**-**)作为列表标记，这些标记后面要添加一个空格，然后再填写内容
+- 列表嵌套只需在子列表中的选项前面添加两个或四个空格即可
+
 ## Tmux
 
 - tmux官网说的主要使用
@@ -6762,6 +6844,8 @@ set -g mouse on
   ```
 
   - -g表示对所有的生效，包括窗口、pane、session等
+
+- 经过验证，上述配置中setw和set效果一样，我们可以用setw来指明是针对window的设置，也可以直接用set来设置，两者是一样的，都是支持的。
 
 ## ranger
 
