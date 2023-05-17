@@ -6766,7 +6766,7 @@ Alt+o	    逆时针旋转当前窗口的面板
 Ctrl+o	    顺时针旋转当前窗口的面板
 ```
 
-#### 其他命令
+##### 其他命令
 
 ```
 # 列出所有快捷键，及其对应的 Tmux 命令
@@ -6791,6 +6791,8 @@ set -g mouse on
 
 ##### Key bindings
 
+- `C-` for the control key, `M-` for the meta key (normally `Alt` on modern computers) and `S-` for the shift key.
+
 - tmux key bindings are changed using the `bind-key` and `unbind-key` commands. Each key binding in tmux belongs to a named key table. There are four default key tables:
 
   - The `root` table contains key bindings for keys pressed without the prefix key.
@@ -6812,6 +6814,9 @@ set -g mouse on
     C-b     Send the prefix key
     C-o     Rotate through the panes
     ...
+    
+    With the -N form, only keys in the root and prefix key tables are listed by default
+    tmux lsk -N   在shell中查看的结果和C-b ?查看的结果一样
     ```
 
 - `bind-key` commands can be used to set a key binding, either interactively or most commonly from the configuration file. Like `list-keys`, `bind-key` has a `-T` flag for the key table to use. If `-T` is not given, the key is put in the `prefix` table; the `-n` flag is a shorthand for `-Troot` to use the `root` table.
@@ -6834,6 +6839,20 @@ set -g mouse on
   ```
 
   - 注意此处的-r是选项，上面的r是按键绑定
+
+##### 命令提示符和键绑定
+
+- `C-b :`打开命令提示符，这样我们就可以输入一些tmux命令，例如创建一个新窗口，在打开命令提示符后输入new-window，这样就创建了一个新窗口
+
+- tmux命令可以在shell中执行，也可以在命令提示符后执行，也可以用键绑定执行，其命令都是一样的
+
+- 如何查看一些命令，可以查看man手册来查看所有的，也可以用命令来查看我们主要使用的键绑定对应的命令
+
+  ```
+  tmux lsk -Tprefix   查看prefix空间中的命令
+  tmux lsk -Troot     查看root空间中的命令   bind-key    -T prefix ?       list-keys -N
+  tmux lsk -N     查看的简介，供我们查看命令使用的，并不是命令    C-b ?       List key bindings
+  ```
 
 ##### 会话和窗口的配置
 
