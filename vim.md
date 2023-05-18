@@ -1162,6 +1162,11 @@ filetype indent on
 - 使用Vim8引入的`:terminal`命令，将在新建的水平分割窗口中进入命令终端。也可以使用`:vertical :term`命令，在新建的垂直分割窗口中进入命令终端。
 - 如果无法正常调用:terminal命令，那么请使用`:version`命令，查看是否包含**+terminal**关键字，以确认在当前版本Vim中已启用此特性。
 - 在命令终端中，点击**`Ctrl-\-N`**快捷键，将从Terminal-Job模式切换至Terminal-Normal模式。在Terminal-Normal模式下，可以像在Vim常规模式下一样，使用光标键或命令来移动光标，也可以使用鼠标或命令来选择和复制文本，以便于将命令输出复制到其他文件。点击**i**键，则可以返回Terminal-Job模式，继续执行命令。上面这个快捷键是按着ctrl在按\然后按N键
+- vim下调用terminal的操作方法
+  - 可以使用\t快捷键打开一个term，然后按快捷键C-N来进入到normal模式，然后我们就可以使用vim的快捷键来复制一些东西，然后y复制，这样我们就可以在vim界面上按p来粘贴。这是从term复制东西到vim
+  - 如果vim包含了clipboard特性，我们就可以用快捷键Y来复制vim的东西到剪贴板，然后在term下就可以按C-V来粘贴了。这是从vim复制东西到term
+  - 从term到term复制，normal模式下是不能使用p粘贴东西的，因为term是只读模式，不能写，如果vim支持clipboard模式，我们就可以拷贝到系统剪切板，然后在job模式下从系统剪切板拷贝东西出来。这样就可以从term到term了。
+
 
 ###### QuickFix
 
@@ -6819,7 +6824,9 @@ set -g mouse on
     tmux lsk -N   在shell中查看的结果和C-b ?查看的结果一样
     ```
 
-- `bind-key` commands can be used to set a key binding, either interactively or most commonly from the configuration file. Like `list-keys`, `bind-key` has a `-T` flag for the key table to use. If `-T` is not given, the key is put in the `prefix` table; the `-n` flag is a shorthand for `-Troot` to use the `root` table.
+- `bind-key` commands can be used to set a key binding, either interactively or most commonly from the configuration file. Like `list-keys`, `bind-key` has a `-T` flag for the key table to use. If `-T` is not given, the key is put in the `prefix` table; the `-n` flag is a shorthand for `-Troot` to use the `root` table.The -r flag indicates this key may repeat
+
+  - -r 标志表示该键可以重复，含义为不用每次都按prefix键，只需要按一次，后面的直接按这个可以重复的按键就可以了
 
 - 上面的意思是说键可以映射到四个空间中，每一个空间都有特定的作用，我们可以使用-T来指定空间，如果不指定就是在prefix空间中，-n是在root空间中。
 
@@ -6854,7 +6861,7 @@ set -g mouse on
   tmux lsk -N     查看的简介，供我们查看命令使用的，并不是命令    C-b ?       List key bindings
   ```
 
-##### 会话和窗口的配置
+##### 会话和窗口的配置set
 
 - `set` 命令是针对会话的配置命令，而针对窗口的配置命令是 `set-window-option`，或者简写为 `setw`。由于窗格是窗口中的事物，要将窗格的默认编号也设置成从1 开始，应该用 `setw` 命令：
 
@@ -6872,25 +6879,122 @@ set -g mouse on
 
 - 格式包含在 #{} 中的字符串选项中，中括号里面包含的是一些变量，这些变量是程序内部使用的，例如session-name代表session的名字，例如设置set -g status-left "[#{session_name}]"，表示在状态栏左侧显示session的名字。
   - 这个最终输出的session名字两边是带[]的，所以引号里面写的是[#{session-name}]
-  
+
   - #{}里面的东西可以理解为有具体的含义，这些是variable，是系统定义好的，双引号里面的东西是都要解释输出的，[]没有其他解释，所以直接输出，#{}里面的session-name有其他含义，直接解释完输出。
-  
+
   - 在中括号中定义的变量都是程序事先写好的，而且具有具体的含义，而且中括号里面变量代表的东西是要输出来的。
-  
+
   - 我们想要在状态栏左侧输出session的名字，但是session的名字是变化的，我们不能写死，所以我们用这个系统变量来代表session的名字，这样系统在读到中括号时，就知道要输出中括号里面的东西，一看时session_name，就把session的名字输出来了。
-  
+
   - 中括号里面都是用的变量，不能写其他的东西。如果写固定的东西在状态栏，就不用中括号格式了。直接 set -g status-left 'red'，这样就将一个red字符写进状态栏左侧了。
-  
+
     ```
     status-right "#{?window_bigger,[#{window_offset_x}#,#{window_offset_y}] ,}\"#{=21:pane_title}\" %H:%M %d-%b-%y
     
     这个配置目前没有看到在状态栏右侧显示[]然后里面有偏移量的指示，不知道window_bigger在什么情况下会为1，目前来看一直是第二个选项，所以没有[]里面有东西的输出。
     ```
-  
+
 - 嵌入样式包含在#[ 和 ] 之间的另一个选项中。每个都会更改后续文本的样式，直到下一个嵌入样式或文本结束。
   - set -g status-left 'default #[fg=red] red #[fg=blue] blue'这个命令的作用就是在左侧的状态栏显示红色的red和蓝色的blue，这个red和blue是固定的不会改变。
   - #[]包围的是下一个#[]之前的输出文字的格式，丽日第一个#[]表示的就是red的格式，第二个#[]表示的是blue的格式。
   - #[]表示的是后面的要输出的文字的格式，并不是要输出的内容，这个和#{}还是有区别的。
+
+##### 复制和粘贴
+
+- tmux 有自己的复制和粘贴系统。使用复制模式复制文本，使用 C-b [ 进入copy-mode模式，最近复制的文本使用 C-b ] 粘贴到活动窗格中。
+
+  - 复制时首先要进入copy-mode模式，然后使用vim的快捷键来移动复制文本，复制完成后退出copy-mode模式，使用C-b ]来粘贴复制的文本，vim的快捷键p不能用来粘贴文本，只能使用tmux自己的粘贴快捷键。
+
+- copy-mode有一些快捷键命令设置
+
+  ```
+  command                      vi          description
+  copy-selection-and-cancel    Enter      Copy the selection and exit copy mode
+  ```
+
+  - 上面这些快捷键命令都是可以配置的。例如可以将y配置成复制然后退出copy-mode模式
+
+    ```
+    bind -T copy-mode-vi y send-keys -X copy-selection-and-cancel
+    ```
+
+- 粘贴缓冲区可以命名，但默认情况下它们由 tmux 分配一个名称，例如 buffer0 或 buffer1。像这样的缓冲区称为自动缓冲区，最多保留 50 个 - 一旦有 50 个缓冲区，添加另一个缓冲区时将删除最旧的缓冲区。如果给一个缓冲区一个名字，它就称为命名缓冲区；无论有多少命名缓冲区都不会被删除。
+
+- 复制某些文本后，可以使用 C-b ] 粘贴最新的文本，或者使用缓冲区模式粘贴较旧的缓冲区，使用 C-b = 进入缓冲区模式。缓冲区模式类似于客户端模式和树模式，并提供缓冲区列表及其内容的预览。除了树模式和客户端模式中使用的导航和标记键外，缓冲模式还支持以下键：
+
+  | Key     | Function                               |
+  | ------- | -------------------------------------- |
+  | `Enter` | Paste selected buffer                  |
+  | `p`     | Paste selected buffer, same as `Enter` |
+  | `P`     | Paste tagged buffers                   |
+  | `d`     | Delete selected buffer                 |
+  | `D`     | Delete tagged buffers                  |
+
+##### tree-mode
+
+- tmux 包含一种模式，可以从树中选择会话、窗口或窗格，这称为树模式。它可用于浏览会话、窗口和窗格；更改附加会话、当前窗口或活动窗格；终止会话、窗口和窗格；或通过标记它们一次将命令应用于多个。
+
+- 有两个键绑定可以进入树模式： C-b s 开始只显示会话并选择附加的会话； C-b w 以展开的会话开始，以便显示窗口并选择附加会话中的当前窗口。
+
+- Tree mode is activated with the `choose-tree` command.
+
+- 树中的项目通过按 t 标记并通过再次按 t 取消标记。标记的项目以粗体显示，并在其名称后带有 *。所有标记的物品都可以通过按 T 取消标记。标记的物品可以通过按 X 一起杀死，或者通过按 : 提示将命令应用于它们。
+
+- `q` exits tree mode.
+
+- This is a list of the keys available in tree mode without pressing the prefix key:
+
+  | Key     | Function                                                     |
+  | ------- | ------------------------------------------------------------ |
+  | `Enter` | Change the attached session, current window or active pane   |
+  | `Up`    | Select previous item                                         |
+  | `Down`  | Select next item                                             |
+  | `Right` | Expand item                                                  |
+  | `Left`  | Collapse item                                                |
+  | `x`     | Kill selected item                                           |
+  | `X`     | Kill tagged items                                            |
+  | `<`     | Scroll preview left                                          |
+  | `>`     | Scroll preview right                                         |
+  | `C-s`   | Search by name                                               |
+  | `n`     | Repeat last search                                           |
+  | `t`     | Toggle if item is tagged                                     |
+  | `T`     | Tag no items                                                 |
+  | `C-t`   | Tag all items                                                |
+  | `:`     | Prompt for a command to run for the selected item or each tagged item |
+  | `O`     | Change sort field                                            |
+  | `r`     | Reverse sort order                                           |
+  | `v`     | Toggle preview                                               |
+  | `q`     | Exit tree mode                                               |
+
+- tree-mode中的kill和bind中的kill不是一个东西，两个功能是一样的，只是一个在tree-mode下kill，一个在普通模式下直接按快捷键kill
+
+  - Pressing `C-b &` prompts for confirmation then kills (closes) the current window. All panes in the window are killed at the same time. `C-b x` kills only the active pane. These are bound to the `kill-window` and `kill-pane` commands.
+  - kill-session 命令会终止附加的会话及其所有窗口并分离客户端。 kill-session 没有键绑定，但可以在命令提示符或树模式下的 : 提示符下使用。
+    - kill-session和kill-server不一样，kill-server是杀掉tmux的后台服务器，一般kill-server在shell中使用，kill-session会杀掉一个具体的session，只会杀掉一个执行命令的那个session
+
+##### 一些命令
+
+###### command-prompt
+
+- 在执行命令之前，第一次出现的字符串“%%”和所有出现的“%1”都被替换为对第一个提示的响应，所有“%2”被替换为对第二个提示的响应，并且 依此类推以获得进一步的提示。 最多可以替换九个提示响应（“%1”到“%9”）。 “%%%”类似于“%%”，但任何引号都会被转义。
+
+  - 上面这句话的意思是，在我们使用command-prompt命令时，不管是键绑定还是命令提示符下，都会在状态栏等待我们输入一些东西，然后我们输入的第一个就替换%1和%%，我们输入的第二个就替换%2，然后在解析命令，例如下面默认的键绑定
+
+    ```
+    bind-key    -T prefix \$      command-prompt -I "#S" { rename-session "%%" }
+    ```
+
+    - 上面这个配置会等待我们在状态栏输入东西，然后输入的东西替换掉%%，然后在解析命令rename-session，相当于交互输入
+    - 注意上面这个配置会将原来的名字也放在下面，在改之前要将原来的删掉。
+
+- man手册
+
+  ```
+  command-prompt "split-window 'exec man %%'"
+  bind-key S command-prompt "new-window -n %1 'ssh %1'"
+  ```
+
+  
 
 ## ranger
 
