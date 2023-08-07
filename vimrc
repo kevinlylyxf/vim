@@ -219,7 +219,7 @@ cnoremap <M-w> <S-Right>
 " ===
 " Use <space> + new arrow keys for moving the cursor around windows
 " lowercase is for moving windows, uppercase is for swapping windows
-noremap <LEADER>w <C-w>w
+noremap <LEADER>w <C-w>w  "go to next window (wrap around)
 noremap <LEADER>k <C-w>k
 noremap <LEADER>K <C-w>K
 noremap <LEADER>j <C-w>j
@@ -280,7 +280,7 @@ noremap tI :tab split<CR>
 " Move around tabs with tn and ti
 noremap tj :+tabnext<CR>
 noremap tk :-tabnext<CR>
-" Move the tabs with tmn and tmi
+" Move the tabs with th and tl
 noremap th :-tabmove<CR>
 noremap tl :+tabmove<CR>
 
